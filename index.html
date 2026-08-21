@@ -7,227 +7,250 @@
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body data-theme="light">
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-mark">C</div>
-      <div>
-        <strong>CORRO</strong>
-        <span>Sponsorship Tracking Draft</span>
-      </div>
-    </div>
-
-    <nav>
-      <button class="nav active" data-view="overview">Overview</button>
-      <button class="nav" data-view="register">Sponsorship Register</button>
-      <button class="nav" data-view="accounting">Accounting Match</button>
-      <button class="nav" data-view="exceptions">Review Queue</button>
-      <button class="nav" data-view="methodology">Methodology</button>
-    </nav>
-
-    <div class="logo-panel">
-      <img src="assets/corro-logo.png" alt="Corro logo" class="corro-logo">
-    </div>
-
-    <div class="side-note">
-      <span class="dot"></span>
-      <div>
-        <b>Draft mode</b>
-        <small>Mock data • Shopify + QuickBooks ready</small>
-      </div>
-    </div>
-  </aside>
-
-  <main>
-    <header>
-      <div>
-        <p class="eyebrow">CORRO · SPONSORSHIP TRACKING</p>
-        <h1>Sponsorship Tracker <span>Draft</span></h1>
-        <p class="sub">Modern draft dashboard prepared for Shopify + QuickBooks connections, focused on sponsorship traceability, accounting evidence, and reviewable classifications.</p>
-      </div>
-
-      <div class="header-actions">
-        <button id="themeToggle" class="icon-btn" title="Toggle light / dark mode" aria-label="Toggle light / dark mode">
-          <span class="sun">☀</span>
-          <span class="moon">☾</span>
-          <span class="toggle-label">Theme</span>
-        </button>
-        <button id="exportBtn" class="ghost">Export CSV</button>
-        <div class="status"><span></span>Draft dataset loaded</div>
-      </div>
-    </header>
-
-    <section class="filters">
-      <label>Date from<input type="date" id="from"></label>
-      <label>Date to<input type="date" id="to"></label>
-      <label>Quarter<select id="quarter"><option value="all">All quarters</option><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option></select></label>
-      <label>Type<select id="type"><option value="all">All types</option></select></label>
-      <label>Match status<select id="match"><option value="all">All statuses</option><option>Matched</option><option>Needs Review</option><option>Shopify Only</option><option>QB Only</option></select></label>
-      <button id="reset" class="secondary">Reset</button>
-    </section>
-
-    <div id="overview" class="view active-view">
-      <section class="kpis" id="kpis"></section>
-
-      <section class="grid2">
-        <div class="panel">
-          <div class="panel-head">
-            <div>
-              <p class="eyebrow">TREND</p>
-              <h2>Monthly Sponsorship Activity</h2>
-            </div>
-            <span>Retail value</span>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand-block">
+        <div class="brand-main">
+          <div class="brand-icon-wrap">
+            <img src="assets/corro-mark.png" alt="Corro mark" class="brand-icon">
           </div>
-          <div id="bars" class="bars"></div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-head">
-            <div>
-              <p class="eyebrow">MIX</p>
-              <h2>Activity by Type</h2>
-            </div>
-            <span>Detected classification</span>
-          </div>
-          <div id="types" class="type-list"></div>
-        </div>
-      </section>
-
-      <section class="grid2">
-        <div class="panel">
-          <div class="panel-head">
-            <div>
-              <p class="eyebrow">CONTROL</p>
-              <h2>Source Coverage</h2>
-            </div>
-          </div>
-          <div id="coverage" class="coverage"></div>
-        </div>
-
-        <div class="panel warning-panel">
-          <div class="panel-head">
-            <div>
-              <p class="eyebrow">REVIEW</p>
-              <h2>Items Requiring Attention</h2>
-            </div>
-            <span id="reviewCount"></span>
-          </div>
-          <div id="reviewPreview"></div>
-        </div>
-      </section>
-    </div>
-
-    <div id="register" class="view">
-      <section class="panel full">
-        <div class="panel-head register-head">
           <div>
-            <p class="eyebrow">DETAIL</p>
-            <h2>Sponsorship Register</h2>
-            <p>Every total can be traced back to the Shopify item and its detection reason.</p>
-          </div>
-          <input id="search" class="search" placeholder="Search order, recipient, SKU, product…">
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Order</th>
-                <th>Recipient</th>
-                <th>Product / SKU</th>
-                <th>Qty</th>
-                <th>Retail</th>
-                <th>Product cost</th>
-                <th>Type</th>
-                <th>Detected by</th>
-                <th>Accounting</th>
-              </tr>
-            </thead>
-            <tbody id="registerBody"></tbody>
-          </table>
-        </div>
-      </section>
-    </div>
-
-    <div id="accounting" class="view">
-      <section class="kpis" id="acctKpis"></section>
-      <section class="panel full">
-        <div class="panel-head">
-          <div>
-            <p class="eyebrow">QUICKBOOKS RECONCILIATION</p>
-            <h2>Accounting Match</h2>
-            <p>QB evidence is shown separately until a reliable join key exists.</p>
+            <div class="brand-title">CORRO</div>
+            <div class="brand-subtitle">Sponsorship Tracking Draft</div>
           </div>
         </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>QB date</th>
-                <th>Vendor</th>
-                <th>Transaction</th>
-                <th>Account</th>
-                <th>Memo / Ref</th>
-                <th>Amount</th>
-                <th>Linked Shopify</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="acctBody"></tbody>
-          </table>
-        </div>
-      </section>
-    </div>
+        <p class="brand-copy">A clean draft to review sponsorship activity, trace item-level evidence, and match accounting signals from Shopify and QuickBooks.</p>
+      </div>
 
-    <div id="exceptions" class="view">
-      <section class="panel full">
-        <div class="panel-head">
-          <div>
-            <p class="eyebrow">MANUAL CHECKS</p>
-            <h2>Review Queue</h2>
-            <p>Only records where automation cannot safely decide.</p>
-          </div>
-        </div>
-        <div id="exceptionCards" class="exception-grid"></div>
-      </section>
-    </div>
+      <nav class="nav-group">
+        <button class="nav active" data-view="overview"><span class="nav-index">01</span><span>Overview</span></button>
+        <button class="nav" data-view="register"><span class="nav-index">02</span><span>Sponsorship Register</span></button>
+        <button class="nav" data-view="accounting"><span class="nav-index">03</span><span>Accounting Match</span></button>
+        <button class="nav" data-view="exceptions"><span class="nav-index">04</span><span>Review Queue</span></button>
+        <button class="nav" data-view="methodology"><span class="nav-index">05</span><span>Methodology</span></button>
+      </nav>
 
-    <div id="methodology" class="view">
-      <section class="panel full methodology">
+      <div class="sidebar-card">
+        <div class="sidebar-card-title">Connected later</div>
+        <div class="sidebar-source-list">
+          <span>Shopify orders & line items</span>
+          <span>QuickBooks bills & expenses</span>
+          <span>Derived classification logic</span>
+        </div>
+      </div>
+
+      <div class="side-note">
+        <span class="dot"></span>
         <div>
-          <p class="eyebrow">DATA CONTRACT</p>
-          <h2>What this Draft uses</h2>
+          <b>Draft mode</b>
+          <small>Mock data loaded • ready for live ETL later</small>
         </div>
+      </div>
+    </aside>
 
-        <div class="method-grid">
-          <article>
-            <span class="source shopify">SHOPIFY</span>
-            <h3>Activity & traceability</h3>
-            <p>Order ID/name, created date, customer/recipient, tags, note/custom attributes, discounts, financial and fulfillment status, line items, SKU, quantity and order/item values.</p>
-          </article>
-          <article>
-            <span class="source qb">QUICKBOOKS</span>
-            <h3>Accounting evidence</h3>
-            <p>Purchase/bill/expense transaction date, vendor/entity, transaction reference, total amount, expense/account lines, item/account references and memo when available.</p>
-          </article>
-          <article>
-            <span class="source manual">DERIVED / REVIEW</span>
-            <h3>Tracker-only fields</h3>
-            <p>Sponsorship type, detection reason, confidence, accounting match status and review note. These are derived from source data or explicitly reviewed — never silently invented.</p>
-          </article>
-        </div>
-
-        <div class="rules">
-          <h3>Detection logic for Draft</h3>
-          <p>Keywords are checked against available Shopify tags, note/custom attributes, discount labels/codes and relevant product/customer metadata. A record stores the exact field that triggered classification. Low-confidence or conflicting records go to Review Queue.</p>
-          <div class="chips">
-            <span>sponsorship</span><span>sponsored</span><span>seeded / seeding</span><span>gift / giveaway</span><span>influencer</span><span>ambassador</span><span>sample / review</span><span>press / PR</span><span>social / content creator</span>
+    <main class="main-content">
+      <section class="hero panel-soft">
+        <div>
+          <p class="eyebrow">CORRO · SPONSORSHIP TRACKING</p>
+          <h1>Sponsorship Tracker <span>Draft</span></h1>
+          <p class="sub">Modern, reviewable, and functional draft prepared for future Shopify + QuickBooks connections. Built to show traceability first — not inflated or invented metrics.</p>
+          <div class="chip-row">
+            <span class="chip chip-accent">Shopify-ready</span>
+            <span class="chip chip-neutral">QuickBooks-ready</span>
+            <span class="chip chip-neutral">Weekly / Monthly / Quarterly</span>
+            <span class="chip chip-neutral">Traceable classifications</span>
           </div>
         </div>
-      </section>
-    </div>
 
-    <footer>Draft architecture: Shopify → classification ETL → normalized sponsorship dataset ← QuickBooks reconciliation → GitHub Pages dashboard.</footer>
-  </main>
+        <div class="header-actions">
+          <button id="themeToggle" class="icon-btn" title="Toggle light / dark mode" aria-label="Toggle light / dark mode">
+            <span class="theme-icon">☾</span>
+            <span class="toggle-label">Dark mode</span>
+          </button>
+          <button id="exportBtn" class="ghost">Export CSV</button>
+          <div class="status"><span></span><strong>Draft</strong>&nbsp;dataset loaded</div>
+        </div>
+      </section>
+
+      <section class="filters panel-soft">
+        <label>Date from<input type="date" id="from"></label>
+        <label>Date to<input type="date" id="to"></label>
+        <label>Quarter<select id="quarter"><option value="all">All quarters</option><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option></select></label>
+        <label>Type<select id="type"><option value="all">All types</option></select></label>
+        <label>Match status<select id="match"><option value="all">All statuses</option><option>Matched</option><option>Needs Review</option><option>Shopify Only</option><option>QB Only</option></select></label>
+        <button id="reset" class="secondary">Reset</button>
+      </section>
+
+      <div id="overview" class="view active-view">
+        <section class="kpis" id="kpis"></section>
+
+        <section class="grid2">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">TREND</p>
+                <h2>Monthly Sponsorship Activity</h2>
+              </div>
+              <span>Retail value</span>
+            </div>
+            <div id="bars" class="bars"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">MIX</p>
+                <h2>Activity by Type</h2>
+              </div>
+              <span>Detected classification</span>
+            </div>
+            <div id="types" class="type-list"></div>
+          </div>
+        </section>
+
+        <section class="grid2 lower-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">CONTROL</p>
+                <h2>Source Coverage</h2>
+              </div>
+            </div>
+            <div id="coverage" class="coverage"></div>
+          </div>
+
+          <div class="panel warning-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">REVIEW</p>
+                <h2>Items Requiring Attention</h2>
+              </div>
+              <span id="reviewCount"></span>
+            </div>
+            <div id="reviewPreview"></div>
+          </div>
+        </section>
+      </div>
+
+      <div id="register" class="view">
+        <section class="panel full">
+          <div class="panel-head register-head">
+            <div>
+              <p class="eyebrow">DETAIL</p>
+              <h2>Sponsorship Register</h2>
+              <p>Every total can be traced back to the Shopify item and the exact reason it was classified.</p>
+            </div>
+            <input id="search" class="search" placeholder="Search order, recipient, SKU, product…">
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Order</th>
+                  <th>Recipient</th>
+                  <th>Product / SKU</th>
+                  <th>Qty</th>
+                  <th>Retail</th>
+                  <th>Product cost</th>
+                  <th>Type</th>
+                  <th>Detected by</th>
+                  <th>Accounting</th>
+                </tr>
+              </thead>
+              <tbody id="registerBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <div id="accounting" class="view">
+        <section class="kpis" id="acctKpis"></section>
+        <section class="panel full">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">QUICKBOOKS RECONCILIATION</p>
+              <h2>Accounting Match</h2>
+              <p>Accounting evidence is displayed separately until a reliable join key exists.</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>QB date</th>
+                  <th>Vendor</th>
+                  <th>Transaction</th>
+                  <th>Account</th>
+                  <th>Memo / Ref</th>
+                  <th>Amount</th>
+                  <th>Linked Shopify</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="acctBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <div id="exceptions" class="view">
+        <section class="panel full">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">MANUAL CHECKS</p>
+              <h2>Review Queue</h2>
+              <p>Only records where automation cannot safely decide or where accounting still needs review.</p>
+            </div>
+          </div>
+          <div id="exceptionCards" class="exception-grid"></div>
+        </section>
+      </div>
+
+      <div id="methodology" class="view">
+        <section class="panel full methodology">
+          <div>
+            <p class="eyebrow">DATA CONTRACT</p>
+            <h2>What this Draft uses</h2>
+          </div>
+
+          <div class="method-grid">
+            <article>
+              <span class="source shopify">SHOPIFY</span>
+              <h3>Activity & traceability</h3>
+              <p>Order ID/name, created date, customer/recipient, tags, note/custom attributes, discounts, financial and fulfillment status, line items, SKU, quantity, and order/item values.</p>
+            </article>
+            <article>
+              <span class="source qb">QUICKBOOKS</span>
+              <h3>Accounting evidence</h3>
+              <p>Purchase, bill, or expense transaction date, vendor/entity, transaction reference, total amount, expense/account lines, item/account references, and memo when available.</p>
+            </article>
+            <article>
+              <span class="source manual">DERIVED / REVIEW</span>
+              <h3>Tracker-only fields</h3>
+              <p>Sponsorship type, detection reason, confidence, accounting match status, and review note. These are derived or reviewed — never silently invented.</p>
+            </article>
+          </div>
+
+          <div class="rules-grid">
+            <div class="rules">
+              <h3>Detection logic for Draft</h3>
+              <p>Keywords are checked against Shopify tags, notes, custom attributes, discount labels/codes, and relevant product/customer metadata. Every record preserves the field that triggered classification.</p>
+              <div class="chips">
+                <span>sponsorship</span><span>sponsored</span><span>seeded / seeding</span><span>gift / giveaway</span><span>influencer</span><span>ambassador</span><span>sample / review</span><span>press / PR</span><span>social / content creator</span>
+              </div>
+            </div>
+            <div class="rules muted-panel">
+              <h3>Intentionally not assumed yet</h3>
+              <p>This draft does not assume ROI, ROAS, CAC, influencer revenue attribution, social engagement, or campaign budget metrics, because those were not confirmed for this project.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer>Draft architecture: Shopify → sponsorship classification ETL → normalized dataset ← QuickBooks reconciliation → GitHub Pages dashboard.</footer>
+    </main>
+  </div>
 
   <script src="assets/app.js"></script>
 </body>

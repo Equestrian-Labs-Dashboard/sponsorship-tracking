@@ -7,6 +7,17 @@ const badge=s=>`<span class="badge ${s.toLowerCase().replaceAll(' ','-')}">${s}<
 function applyTheme(theme){
   document.body.setAttribute('data-theme', theme);
   localStorage.setItem('corro_theme', theme);
+  const icon = $('.theme-icon');
+  const label = $('.toggle-label');
+  if(icon && label){
+    if(theme === 'dark'){
+      icon.textContent = '☀';
+      label.textContent = 'Light mode';
+    }else{
+      icon.textContent = '☾';
+      label.textContent = 'Dark mode';
+    }
+  }
 }
 
 function initTheme(){
@@ -32,21 +43,21 @@ function render(){
 
   $('#kpis').innerHTML=[
     ['Sponsorship Orders',orders,'Unique Shopify orders'],
-    ['Sponsored Units',units,'Line-item units'],
-    ['Retail Value',money(retail),'Shopify item value'],
-    ['Product Cost',money(cost),'Cost basis when available'],
-    ['Recipients',recips,'Unique recipients']
+    ['Sponsored Units',units,'Detected sponsored units'],
+    ['Retail Value',money(retail),'Retail value from Shopify items'],
+    ['Product Cost',money(cost),'Inventory cost basis when available'],
+    ['Recipients',recips,'Unique recipients / customers']
   ].map(x=>`<div class="kpi"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="hint">${x[2]}</div></div>`).join('');
 
   const months={};
   rows.forEach(r=>{const k=r.date.slice(0,7);months[k]=(months[k]||0)+r.retail});
   const max=Math.max(...Object.values(months),1);
-  $('#bars').innerHTML=Object.entries(months).map(([m,v])=>`<div class="bar-wrap"><div class="bar" data-value="${money(v)}" style="height:${Math.max(6,v/max*100)}%"></div><div class="bar-label">${new Date(m+'-01T00:00:00').toLocaleString('en',{month:'short'})}</div></div>`).join('')||'<p class="muted">No activity for current filters.</p>';
+  $('#bars').innerHTML=Object.entries(months).map(([m,v])=>`<div class="bar-wrap"><div class="bar" data-value="${money(v)}" style="height:${Math.max(8,v/max*100)}%"></div><div class="bar-label">${new Date(m+'-01T00:00:00').toLocaleString('en',{month:'short'})}</div></div>`).join('') || '<p class="muted">No activity for current filters.</p>';
 
   const types={};
   rows.forEach(r=>types[r.type]=(types[r.type]||0)+r.retail);
   const tmax=Math.max(...Object.values(types),1);
-  $('#types').innerHTML=Object.entries(types).sort((a,b)=>b[1]-a[1]).map(([t,v])=>`<div class="type-row"><span>${t}</span><div class="track"><i style="width:${v/tmax*100}%"></i></div><b>${money(v)}</b></div>`).join('');
+  $('#types').innerHTML=Object.entries(types).sort((a,b)=>b[1]-a[1]).map(([t,v])=>`<div class="type-row"><span>${t}</span><div class="track"><i style="width:${v/tmax*100}%"></i></div><b>${money(v)}</b></div>`).join('') || '<p class="muted">No activity for current filters.</p>';
 
   const matched=rows.filter(r=>r.match==='Matched').length,
         review=rows.filter(r=>r.match==='Needs Review').length,
@@ -57,7 +68,7 @@ function render(){
     <div class="cover-card"><b>${sh}</b><span>Shopify only</span></div>`;
 
   $('#reviewCount').textContent=`${review} records`;
-  $('#reviewPreview').innerHTML=rows.filter(r=>r.match!=='Matched').slice(0,4).map(r=>`<div class="mini-review"><div><b>${r.order}</b> · ${r.recipient}<br><span class="muted">${r.detectedBy}</span></div>${badge(r.match)}</div>`).join('')||'<span class="muted">No items require attention.</span>';
+  $('#reviewPreview').innerHTML=rows.filter(r=>r.match!=='Matched').slice(0,4).map(r=>`<div class="mini-review"><div><b>${r.order}</b> · ${r.recipient}<br><span class="muted">${r.detectedBy}</span></div>${badge(r.match)}</div>`).join('') || '<span class="muted">No items require attention.</span>';
 
   renderRegister(rows);
   renderAccounting();
@@ -67,21 +78,21 @@ function render(){
 function renderRegister(rows){
   const s=($('#search')?.value||'').toLowerCase();
   rows=rows.filter(r=>JSON.stringify(r).toLowerCase().includes(s));
-  $('#registerBody').innerHTML=rows.map(r=>`<tr><td>${r.date}</td><td><b>${r.order}</b></td><td>${r.recipient}</td><td>${r.product}<br><span class="muted">${r.sku}</span></td><td>${r.qty}</td><td>${money(r.retail)}</td><td>${money(r.cost)}</td><td>${r.type}</td><td>${r.detectedBy}<br><span class="muted">Confidence: ${r.confidence}</span></td><td>${badge(r.match)}${r.qbRef?`<br><span class="muted">${r.qbRef}</span>`:''}</td></tr>`).join('');
+  $('#registerBody').innerHTML=rows.length ? rows.map(r=>`<tr><td>${r.date}</td><td><b>${r.order}</b></td><td>${r.recipient}</td><td>${r.product}<br><span class="muted">${r.sku}</span></td><td>${r.qty}</td><td>${money(r.retail)}</td><td>${money(r.cost)}</td><td>${r.type}</td><td>${r.detectedBy}<br><span class="muted">Confidence: ${r.confidence}</span></td><td>${badge(r.match)}${r.qbRef?`<br><span class="muted">${r.qbRef}</span>`:''}</td></tr>`).join('') : `<tr><td colspan="10" class="muted">No rows match the current filters.</td></tr>`;
 }
 
 function renderAccounting(){
   const a=DATA.accounting;
   const total=a.reduce((x,r)=>x+r.amount,0), matched=a.filter(r=>r.status==='Matched'), unmatched=a.filter(r=>r.status!=='Matched');
   $('#acctKpis').innerHTML=[
-    ['QB Evidence',a.length,'Mock transactions'],
-    ['Accounting Amount',money(total),'All displayed QB rows'],
-    ['Matched Records',matched.length,'Linked to Shopify'],
+    ['QB Evidence',a.length,'Displayed QuickBooks transactions'],
+    ['Accounting Amount',money(total),'All QB rows shown'],
+    ['Matched Records',matched.length,'Linked to Shopify activity'],
     ['Matched Amount',money(matched.reduce((x,r)=>x+r.amount,0)),'Reconciled evidence'],
-    ['Unlinked QB',unmatched.length,'Requires review']
+    ['Unlinked QB',unmatched.length,'Still needs review']
   ].map(x=>`<div class="kpi"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="hint">${x[2]}</div></div>`).join('');
 
-  $('#acctBody').innerHTML=a.map(r=>`<tr><td>${r.date}</td><td>${r.vendor}</td><td>${r.txn}</td><td>${r.account}</td><td>${r.ref}</td><td>${money(r.amount)}</td><td>${r.linked||'—'}</td><td>${badge(r.status)}</td></tr>`).join('');
+  $('#acctBody').innerHTML=a.length ? a.map(r=>`<tr><td>${r.date}</td><td>${r.vendor}</td><td>${r.txn}</td><td>${r.account}</td><td>${r.ref}</td><td>${money(r.amount)}</td><td>${r.linked||'—'}</td><td>${badge(r.status)}</td></tr>`).join('') : `<tr><td colspan="8" class="muted">No accounting rows available.</td></tr>`;
 }
 
 function renderExceptions(rows){
@@ -90,7 +101,7 @@ function renderExceptions(rows){
   $('#exceptionCards').innerHTML=[
     ...x.map(r=>({title:`${r.order} · ${r.recipient}`,type:r.match,body:`${r.product} (${r.sku}). Detection: ${r.detectedBy}. Confidence: ${r.confidence}.`,small:'Shopify-derived record'})),
     ...qb.map(r=>({title:`${r.txn} · ${r.vendor}`,type:r.status,body:`${r.account} — ${money(r.amount)}. Reference: ${r.ref}. No Shopify order has been linked yet.`,small:'QuickBooks-derived record'}))
-  ].map(r=>`<article class="exception">${badge(r.type)}<h3>${r.title}</h3><p>${r.body}</p><small>${r.small}</small></article>`).join('')||'<p class="muted">No exceptions.</p>';
+  ].map(r=>`<article class="exception">${badge(r.type)}<h3>${r.title}</h3><p>${r.body}</p><small>${r.small}</small></article>`).join('') || '<p class="muted">No exceptions.</p>';
 }
 
 function exportCSV(){
@@ -116,7 +127,7 @@ $$('.nav').forEach(b=>b.onclick=()=>{
   $$('.nav').forEach(x=>x.classList.remove('active'));
   b.classList.add('active');
   $$('.view').forEach(x=>x.classList.remove('active-view'));
-  $('#'+b.dataset.view).classList.add('active-view')
+  $('#'+b.dataset.view).classList.add('active-view');
 });
 
 ['from','to','quarter','type','match'].forEach(id=>$('#'+id).addEventListener('change',render));

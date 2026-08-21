@@ -1,0 +1,23 @@
+name: Refresh sponsorship data (placeholder)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 10 * * 1'
+
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Placeholder message
+        run: |
+          echo "This workflow is a placeholder for the future live ETL."
+          echo "Later this job should:"
+          echo "1. Pull Shopify data"
+          echo "2. Pull QuickBooks data"
+          echo "3. Normalize sponsorship activity"
+          echo "4. Rebuild dashboard data JSON"
+          echo "5. Commit or publish updated dataset"

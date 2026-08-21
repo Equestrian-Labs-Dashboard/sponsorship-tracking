@@ -67,11 +67,34 @@ normalized dataset -> GitHub Pages dashboard
 
 When you connect live data later, typical secrets may include:
 
-- `SHOPIFY_STORE`
-- `SHOPIFY_ACCESS_TOKEN`
+- `CORRO_SHOPIFY_STORE`
+- `CORRO_SHOPIFY_ACCESS_TOKEN`
+- `CAVALI_SHOPIFY_STORE`
+- `CAVALI_SHOPIFY_ACCESS_TOKEN`
 - `QB_CLIENT_ID`
 - `QB_CLIENT_SECRET`
 - `QB_REALM_ID`
 - `QB_REFRESH_TOKEN`
 
 Do **not** add them now if you are still working with mock data only.
+
+
+### Shopify stores
+
+Use separate secrets because Corro and Cavali are different Shopify sources:
+
+```text
+CORRO_SHOPIFY_STORE
+CORRO_SHOPIFY_ACCESS_TOKEN
+
+CAVALI_SHOPIFY_STORE
+CAVALI_SHOPIFY_ACCESS_TOKEN
+```
+
+Example store value:
+
+```text
+your-store.myshopify.com
+```
+
+Do not paste `https://` into the store secret unless the future ETL explicitly expects it.

@@ -315,3 +315,31 @@ footer{font-size:11px;color:var(--muted);text-align:center;padding:22px 0 12px}
   .sidebar-card,.brand-copy{display:none}
   .nav{padding:11px 12px}
 }
+
+
+/* Corro logo contrast fix */
+.brand-wording{min-width:0}
+.brand-title{
+  color:#ffffff !important;
+  font-size:17px;
+  font-weight:900;
+  letter-spacing:1.2px;
+  line-height:1;
+  text-shadow:0 1px 10px rgba(0,0,0,.30);
+}
+.brand-subtitle{
+  color:#c7cce0 !important;
+  font-size:11px;
+  margin-top:5px;
+  line-height:1.35;
+}
+.brand-icon-wrap{
+  background:rgba(75,93,232,.12) !important;
+  border:1px solid rgba(116,132,255,.30) !important;
+}
+.brand-icon{
+  width:42px !important;
+  height:42px !important;
+  object-fit:contain;
+  filter:drop-shadow(0 4px 10px rgba(75,93,232,.28));
+}

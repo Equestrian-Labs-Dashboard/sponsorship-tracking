@@ -581,3 +581,18 @@ td{
   font-size:12px;
 
 }
+
+
+/* v2 improvements */
+body{line-height:1.45}
+button,input,select{font:inherit}
+.panel,.panel-soft{box-shadow:0 10px 30px rgba(16,24,40,.06)}
+.main-content{max-width:1500px;margin:auto}
+@media(max-width:900px){
+ .app-shell{display:block}
+ .sidebar{width:100%}
+ .hero{flex-direction:column}
+ .main-content{padding:16px}
+ h1{font-size:32px}
+}
+.table-wrap{overflow-x:auto}

@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "sync-data": "node scripts/sync-data.js"
+    "sync-data": "node scripts/sync-data.js",
+    "validate": "node --check scripts/sync-data.js"
   },
   "dependencies": {
     "googleapis": "^144.0.0"
-  }
+  },
+  "description": "Sponsorship tracking dashboard with Shopify, QuickBooks and Google Sheets pipeline"
 }

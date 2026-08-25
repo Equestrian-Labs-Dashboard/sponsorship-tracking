@@ -1,0 +1,13 @@
+{
+  "shopify": {
+    "corro": [],
+    "cavali": []
+  },
+  "quickbooks": {
+    "bills": [],
+    "transactions": [],
+    "ledger": [],
+    "payables": [],
+    "vendorBalance": []
+  }
+}

@@ -1,29 +1,68 @@
 window.DATA = {
-  sponsorships: [],
-  accounting: [],
-  shopify: {}
+  quickbooks: {},
+  shopify: {},
+  loaded: false
 };
 
-fetch("./data/dashboard.json")
-.then(response => {
-  if (!response.ok) {
-    throw new Error("No existe data/dashboard.json");
-  }
-  return response.json();
-})
-.then(data => {
-  window.DATA.shopify = data.shopify || {};
-  window.DATA.sponsorships = data.quickbooks?.bills || [];
-  window.DATA.accounting = [
-    ...(data.quickbooks?.ledger || []),
-    ...(data.quickbooks?.transactions || []),
-    ...(data.quickbooks?.payables || [])
-  ];
 
-  console.log("Datos reales cargados", window.DATA);
+async function loadDashboardData(){
 
-  if (typeof window.render === "function") {
-    window.render();
-  }
-})
-.catch(error => console.error("Error dashboard:", error));
+    try {
+
+        const response = await fetch(
+            './data/dashboard.json'
+        );
+
+
+        if(!response.ok){
+            throw new Error(
+                "No existe dashboard.json"
+            );
+        }
+
+
+        const json = await response.json();
+
+
+        window.DATA = {
+
+            quickbooks:
+                json.quickbooks || {},
+
+
+            shopify:
+                json.shopify || {},
+
+
+            loaded:true
+        };
+
+
+        console.log(
+            "Dashboard cargado correctamente",
+            window.DATA
+        );
+
+
+        document.dispatchEvent(
+            new Event(
+                "dashboard-loaded"
+            )
+        );
+
+
+    } catch(error){
+
+        console.error(
+            "Error cargando dashboard",
+            error
+        );
+
+
+        window.DATA.loaded=false;
+    }
+
+}
+
+
+loadDashboardData();

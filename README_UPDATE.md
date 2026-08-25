@@ -1,13 +1,9 @@
-# Update v2 - Sponsorship Tracker
+# Fix data loader
 
-Improvements included:
-- Cleaner project organization.
-- Responsive dashboard styling.
-- Safer environment handling with .gitignore.
-- Example dashboard data structure.
-- Improved maintainability for future Shopify / QuickBooks integrations.
+This update keeps the connected project structure.
 
-Before deploying:
-1. Install dependencies.
-2. Add GitHub secrets.
-3. Generate data/dashboard.json with the sync script.
+Changes:
+- Uses data/dashboard.json first.
+- Falls back to mock-data.json.
+- Accepts Shopify and QuickBooks nested exports.
+- Does not replace connected secrets.

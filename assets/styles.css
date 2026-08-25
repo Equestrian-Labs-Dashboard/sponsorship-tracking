@@ -596,3 +596,6 @@ button,input,select{font:inherit}
  h1{font-size:32px}
 }
 .table-wrap{overflow-x:auto}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:20px 0}.kpi{background:white;border:1px solid var(--border);padding:20px;border-radius:16px;display:flex;flex-direction:column}.kpi b{font-size:28px}.bar-row{display:flex;align-items:center;gap:10px;margin:12px 0}.bar-row span{width:80px}.bar-row div{flex:1;background:#eef2ff;height:12px;border-radius:10px;overflow:hidden}.bar-row i{display:block;height:100%;background:#304ffe}.dark{--bg:#0b1220;--card:#111827;--text:#f8fafc;--border:#243041}.dark .panel,.dark .panel-soft,.dark .kpi{background:#111827;color:white}
+@media(max-width:900px){.app-shell{display:block}.sidebar{width:auto}.kpis{grid-template-columns:1fr 1fr}.main-content{padding:15px}}

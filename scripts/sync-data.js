@@ -2,6 +2,11 @@ import fs from "fs";
 import { readSheet, getSheetsList } from "../src/googleSheets.js";
 
 async function shopify(store, token, name) {
+  if (!store || !token) {
+    console.log(`Shopify ${name}: sin credenciales`);
+    return [];
+  }
+
   const response = await fetch(
     `https://${store}/admin/api/2026-01/orders.json`,
     {
@@ -21,23 +26,15 @@ async function shopify(store, token, name) {
 }
 
 async function main() {
-  console.log(
- "HOJAS DISPONIBLES:"
-);
-
-console.log(
- await getSheetsList()
-);
+  console.log("HOJAS DISPONIBLES:");
+  console.log(await getSheetsList());
 
   const data = {
     quickbooks: {
       bills: await readSheet("QuickBooks Bill"),
       vendorBalance: await readSheet("QuickBooks Vendor Balance Detail Import"),
       ledger: await readSheet("QuickBooks General Ledger Import"),
-     transactions:
-await readSheet(
-"QuickBooks Transaction List By Vendor Import"
-),
+      transactions: await readSheet("QuickBooks Transaction List By Vendor Import"),
       payables: await readSheet("Payables")
     },
     shopify: {
@@ -54,18 +51,18 @@ await readSheet(
     }
   };
 
-  fs.mkdirSync("data", {recursive:true});
+  fs.mkdirSync("data", { recursive: true });
 
   fs.writeFileSync(
     "data/dashboard.json",
-    JSON.stringify(data,null,2),
+    JSON.stringify(data, null, 2),
     "utf8"
   );
 
   console.log("OK dashboard.json creado");
 }
 
-main().catch(err=>{
+main().catch(err => {
   console.error(err);
   process.exit(1);
 });

@@ -160,3 +160,8 @@ console.error(error);
 process.exit(1);
 
 });
+console.log(
+ fs.existsSync("data/dashboard.json")
+ ? "OK dashboard.json creado"
+ : "ERROR no existe dashboard.json"
+);

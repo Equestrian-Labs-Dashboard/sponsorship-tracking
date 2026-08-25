@@ -2,7 +2,8 @@ name: Sponsorship Tracker Sync
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -23,7 +24,7 @@ jobs:
 
       - run: npm install
 
-      - name: Generate dashboard
+      - name: Generate dashboard data
         env:
           GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
@@ -33,7 +34,10 @@ jobs:
           CAVALI_SHOPIFY_ACCESS_TOKEN: ${{ secrets.CAVALI_SHOPIFY_ACCESS_TOKEN }}
         run: npm run sync-data
 
-      - run: ls -la data
+      - name: Verify generated file
+        run: |
+          ls -la
+          ls -la data
 
       - uses: actions/configure-pages@v5
 

@@ -1,4 +1,4 @@
-fetch('data/dashboard.json').then(r=>r.json()).then(d=>{window.REAL_DATA=d;});
+fetch('data/dashboard.json').then(r=>r.json()).then(d=>{window.REAL_DASHBOARD=d;}).catch(console.error);
 let DATA={sponsorships:[],accounting:[]};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(n||0);

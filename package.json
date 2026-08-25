@@ -1,7 +1,8 @@
 {
   "type": "module",
   "scripts": {
-    "test": "node test-connection.js"
+    "test": "node test-connection.js",
+    "sync-data": "node scripts/sync-data.js"
   },
   "dependencies": {
     "googleapis": "^144.0.0"

@@ -116,12 +116,23 @@ function exportCSV(){
 
 initTheme();
 
-fetch('data/mock-data.json')
+fetch('data/dashboard.json')
   .then(r=>r.json())
   .then(d=>{
-    DATA=d;
-    [...new Set(d.sponsorships.map(x=>x.type))].sort().forEach(t=>$('#type').insertAdjacentHTML('beforeend',`<option>${t}</option>`));
+    const accounting = d.accounting || {};
+    DATA = {
+      sponsorships: accounting.bills || [],
+      accounting: accounting
+    };
+
+    const types = [...new Set(DATA.sponsorships.map(x=>x.type || x['Transaction Type'] || 'Bill'))].sort();
+
+    types.forEach(t=>$('#type').insertAdjacentHTML('beforeend',`<option>${t}</option>`));
+
     render();
+  })
+  .catch(err=>{
+    console.error('No se pudo cargar dashboard.json', err);
   });
 
 $$('.nav').forEach(b=>b.onclick=()=>{

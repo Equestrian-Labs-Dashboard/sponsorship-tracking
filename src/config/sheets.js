@@ -1,7 +1,18 @@
 export const SHEETS = {
-  bills: "QuickBooks Bill",
-  vendorBalance: "QuickBooks Vendor Balance Detail Import",
-  ledger: "QuickBooks General Ledger Import",
-  transactions: "QuickBooks Transaction List By Vendor",
-  payables: "Payables"
+
+    BILL:
+    "QuickBooks Bill",
+
+    VENDOR_BALANCE:
+    "QuickBooks Vendor Balance Detail Import",
+
+    GENERAL_LEDGER:
+    "QuickBooks General Ledger Import",
+
+    TRANSACTION_VENDOR:
+    "QuickBooks Transaction List By Vendor",
+
+    PAYABLES:
+    "Payables"
+
 };

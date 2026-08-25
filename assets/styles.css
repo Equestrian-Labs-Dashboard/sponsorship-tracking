@@ -1,0 +1,583 @@
+:root{
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --text:#101828;
+  --muted:#667085;
+  --border:#e4e7ec;
+  --accent:#304ffe;
+  --green:#12b76a;
+}
+
+
+*{
+  box-sizing:border-box;
+}
+
+
+body{
+
+  margin:0;
+
+  font-family:
+  Inter,
+  Arial,
+  Helvetica,
+  sans-serif;
+
+  background:var(--bg);
+
+  color:var(--text);
+
+}
+
+
+
+.app-shell{
+
+  display:flex;
+
+  min-height:100vh;
+
+}
+
+
+
+.sidebar{
+
+  width:260px;
+
+  background:#111827;
+
+  color:white;
+
+  padding:24px;
+
+}
+
+
+
+.brand-title{
+
+  font-size:28px;
+
+  font-weight:800;
+
+}
+
+
+
+.brand-subtitle{
+
+  color:#cbd5e1;
+
+  font-size:13px;
+
+}
+
+
+
+.nav-group{
+
+  margin-top:35px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:8px;
+
+}
+
+
+
+.nav{
+
+  border:0;
+
+  background:transparent;
+
+  color:#e5e7eb;
+
+  padding:12px;
+
+  text-align:left;
+
+  border-radius:10px;
+
+  cursor:pointer;
+
+}
+
+
+
+.nav:hover,
+.nav.active{
+
+  background:#1f2937;
+
+}
+
+
+
+.nav-index{
+
+  margin-right:10px;
+
+  color:#93c5fd;
+
+}
+
+
+
+.sidebar-card{
+
+  margin-top:35px;
+
+  background:#1f2937;
+
+  padding:15px;
+
+  border-radius:12px;
+
+}
+
+
+
+.sidebar-source-list{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:8px;
+
+  margin-top:12px;
+
+  font-size:13px;
+
+}
+
+
+
+.side-note{
+
+  margin-top:20px;
+
+  display:flex;
+
+  gap:10px;
+
+  font-size:13px;
+
+}
+
+
+
+.dot{
+
+  width:10px;
+
+  height:10px;
+
+  background:#12b76a;
+
+  border-radius:50%;
+
+}
+
+
+
+
+
+.main-content{
+
+  flex:1;
+
+  padding:30px;
+
+}
+
+
+
+
+
+.panel-soft,
+.panel{
+
+  background:white;
+
+  border:1px solid var(--border);
+
+  border-radius:18px;
+
+  padding:25px;
+
+}
+
+
+
+.hero{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:20px;
+
+}
+
+
+
+.eyebrow{
+
+  color:var(--accent);
+
+  font-weight:700;
+
+}
+
+
+
+h1{
+
+  font-size:42px;
+
+  margin:10px 0;
+
+}
+
+
+
+h1 span{
+
+  color:var(--accent);
+
+}
+
+
+
+.sub{
+
+  color:var(--muted);
+
+}
+
+
+
+.chip-row{
+
+  display:flex;
+
+  gap:10px;
+
+  margin-top:20px;
+
+}
+
+
+
+.chip{
+
+  padding:8px 14px;
+
+  border-radius:20px;
+
+  border:1px solid var(--border);
+
+}
+
+
+
+.chip-accent{
+
+  background:#eef4ff;
+
+  color:#304ffe;
+
+}
+
+
+
+.header-actions{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:12px;
+
+}
+
+
+
+button,
+select,
+input{
+
+  padding:10px;
+
+  border-radius:8px;
+
+  border:1px solid var(--border);
+
+}
+
+
+
+.status{
+
+  padding:10px;
+
+  background:#ecfdf3;
+
+  border-radius:10px;
+
+  color:#027a48;
+
+}
+
+
+
+.status span{
+
+  display:inline-block;
+
+  width:8px;
+
+  height:8px;
+
+  background:#12b76a;
+
+  border-radius:50%;
+
+}
+
+
+
+
+
+.filters{
+
+  margin-top:20px;
+
+  display:flex;
+
+  gap:15px;
+
+  flex-wrap:wrap;
+
+}
+
+
+
+.filters label{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:5px;
+
+}
+
+
+
+
+
+.kpis{
+
+  display:grid;
+
+  grid-template-columns:repeat(5,1fr);
+
+  gap:15px;
+
+  margin:25px 0;
+
+}
+
+
+
+.kpi{
+
+  background:white;
+
+  border:1px solid var(--border);
+
+  padding:20px;
+
+  border-radius:15px;
+
+}
+
+
+
+.kpi .label{
+
+  color:var(--muted);
+
+}
+
+
+
+.kpi .value{
+
+  font-size:26px;
+
+  font-weight:800;
+
+}
+
+
+
+
+.grid2{
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:20px;
+
+}
+
+
+
+#bars{
+
+  height:220px;
+
+  display:flex;
+
+  align-items:end;
+
+  gap:12px;
+
+}
+
+
+
+.bar-wrap{
+
+  flex:1;
+
+}
+
+
+
+.bar{
+
+  background:var(--accent);
+
+  border-radius:8px;
+
+}
+
+
+
+
+
+.type-row{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:15px;
+
+  margin:15px 0;
+
+}
+
+
+
+.track{
+
+  flex:1;
+
+  background:#eee;
+
+  height:10px;
+
+  border-radius:10px;
+
+}
+
+
+
+.track i{
+
+  display:block;
+
+  height:100%;
+
+  background:#12b76a;
+
+}
+
+
+
+
+
+.view{
+
+  display:none;
+
+}
+
+
+
+.active-view{
+
+  display:block;
+
+}
+
+
+
+
+
+table{
+
+  width:100%;
+
+  border-collapse:collapse;
+
+  margin-top:20px;
+
+}
+
+
+
+th,
+td{
+
+  padding:12px;
+
+  border-bottom:1px solid var(--border);
+
+  text-align:left;
+
+}
+
+
+
+.muted{
+
+  color:var(--muted);
+
+}
+
+
+
+.badge{
+
+  padding:5px 10px;
+
+  border-radius:20px;
+
+  background:#eef2ff;
+
+  font-size:12px;
+
+}

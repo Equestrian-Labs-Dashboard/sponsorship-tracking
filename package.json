@@ -1,0 +1,5 @@
+{
+ "type":"module",
+ "scripts":{"test":"node test-connection.js"},
+ "dependencies":{"googleapis":"^144.0.0"}
+}

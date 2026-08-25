@@ -1,2 +1,25 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sponsorship Tracker</title><link rel="stylesheet" href="assets/css/main.css"></head><body><div id="app"><header class="card"><h1>Sponsorship Tracker <span>Live</span></h1><p>Shopify + QuickBooks + Google Sheets dashboard</p></header><section id="kpis" class="grid"></section><section class="grid"><div class="card"><h2>Monthly Activity</h2><div id="monthly"></div></div><div class="card"><h2>Activity by Type</h2><div id="types"></div></div></section><section class="card"><h2>Sponsorship Register</h2><table><tbody id="rows"></tbody></table></section></div><script type="module" src="assets/js/app.js"></script></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CORRO Sponsorship Tracker</title>
+<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<div id="app">
+<header class="card hero">
+<h1>CORRO Sponsorship Tracker <span>Live</span></h1>
+<p>Shopify + QuickBooks + Google Sheets dashboard</p>
+<div id="status"></div>
+</header>
+<section id="kpis" class="grid"></section>
+<section class="grid">
+<div class="card"><h2>Monthly Activity</h2><div id="monthly"></div></div>
+<div class="card"><h2>Activity by Type</h2><div id="types"></div></div>
+</section>
+<section class="card"><h2>Sponsorship Register</h2>
+<table><thead><tr><th>Date</th><th>Recipient</th><th>Product</th><th>Type</th><th>Value</th></tr></thead>
+<tbody id="rows"></tbody></table></section>
+</div>
+<script type="module" src="assets/js/app.js"></script>
+</body></html>

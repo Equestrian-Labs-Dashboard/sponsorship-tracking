@@ -1,5 +1,5 @@
 import fs from "fs";
-import { readSheet } from "../src/googleSheets.js";
+import { readSheet, getSheetsList } from "../src/googleSheets.js";
 
 async function shopify(store, token, name) {
   const response = await fetch(
@@ -21,6 +21,13 @@ async function shopify(store, token, name) {
 }
 
 async function main() {
+  console.log(
+ "HOJAS DISPONIBLES:"
+);
+
+console.log(
+ await getSheetsList()
+);
 
   const data = {
     quickbooks: {

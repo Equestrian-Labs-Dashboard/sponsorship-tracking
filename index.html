@@ -30,7 +30,7 @@
       </nav>
 
       <div class="sidebar-card">
-        <div class="sidebar-card-title">Connected later</div>
+        <div class="sidebar-card-title">Connected sources</div>
         <div class="sidebar-source-list">
           <span>Shopify orders & line items</span>
           <span>QuickBooks bills & expenses</span>
@@ -38,13 +38,13 @@
         </div>
       </div>
 
-      <div class="side-note">
-        <span class="dot"></span>
-        <div>
-          <b>Draft mode</b>
-          <small>Mock data loaded • ready for live ETL later</small>
-        </div>
-      </div>
+<div class="side-note">
+  <span class="dot"></span>
+  <div>
+    <b>Live data connected</b>
+    <small>Google Sheets + Shopify + QuickBooks synchronized</small>
+  </div>
+</div>
     </aside>
 
     <main class="main-content">
@@ -67,7 +67,10 @@
             <span class="toggle-label">Dark mode</span>
           </button>
           <button id="exportBtn" class="ghost">Export CSV</button>
-          <div class="status"><span></span><strong>Draft</strong>&nbsp;dataset loaded</div>
+<div class="status">
+  <span></span>
+  <strong>Connected</strong>&nbsp;dataset loaded
+</div>
         </div>
       </section>
 
@@ -251,6 +254,6 @@
     </main>
   </div>
 
-  <script src="assets/app.js"></script>
+  <script type="module" src="assets/app.js"></script>
 </body>
 </html>

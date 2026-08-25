@@ -5,6 +5,22 @@ const money = n => new Intl.NumberFormat("en-US", { style: "currency", currency:
 
 function safe(v, d = "Unknown") { return String(v ?? d); }
 
+// Soluciona el error [object Object] extrayendo el nombre correctamente
+function getCustomerName(c) {
+  if (!c) return "";
+  if (typeof c === 'string') return c;
+  if (c.name) return c.name;
+  if (c.first_name || c.last_name) return `${c.first_name || ''} ${c.last_name || ''}`.trim();
+  return "Unknown";
+}
+
+// Limpia strings para que siempre se puedan sumar como números y no queden en $0
+function getNum(val) {
+  if (val === null || val === undefined) return 0;
+  if (typeof val === 'string') val = val.replace(/[^0-9.-]+/g,"");
+  return Number(val) || 0;
+}
+
 function badge(v) {
   const s = safe(v, "Pending");
   const className = s.toLowerCase().replaceAll(" ", "-");
@@ -27,7 +43,6 @@ async function loadDashboard() {
     if (!r.ok) throw Error(r.status);
     DATA = normalize(await r.json());
   } catch (e) {
-    console.warn("No se encontró dashboard.json, cargando datos simulados", e);
     try {
       const r = await fetch("./data/mock-data.json?" + Date.now());
       DATA = normalize(await r.json());
@@ -39,11 +54,13 @@ async function loadDashboard() {
 function render() {
   const s = DATA.sponsorships, a = DATA.accounting;
   
+  // 1. Arreglamos los cálculos numéricos en los KPIs
   if ($("#kpis")) {
+    const totalRetail = s.reduce((t, x) => t + getNum(x.retail || x.value || x.amount || x.total_price), 0);
     $("#kpis").innerHTML = `
       <div class="kpi"><div class="label">Sponsorships</div><div class="value">${s.length}</div></div>
       <div class="kpi"><div class="label">Accounting</div><div class="value">${a.length}</div></div>
-      <div class="kpi"><div class="label">Retail Value</div><div class="value">${money(s.reduce((t, x) => t + Number(x.retail || x.value || x.amount || 0), 0))}</div></div>`;
+      <div class="kpi"><div class="label">Retail Value</div><div class="value">${money(totalRetail)}</div></div>`;
   }
 
   const months = {}; 
@@ -56,7 +73,6 @@ function render() {
     types[t] = (types[t] || 0) + 1;
   });
 
-  // Dibujar barras dinámicas usando HTML y clases CSS
   if ($("#bars")) {
     const maxVal = Math.max(...Object.values(months), 1);
     $("#bars").innerHTML = Object.entries(months).map(([k, v]) => {
@@ -70,7 +86,6 @@ function render() {
     }).join("") || "No data";
   }
 
-  // Dibujar categorías
   if ($("#types")) {
     $("#types").innerHTML = Object.entries(types).map(([k, v]) => `
       <div class="type-row">
@@ -79,24 +94,23 @@ function render() {
       </div>`).join("") || "No data";
   }
 
-  // Renderizar la tabla de Sponsorships
+  // 2. Arreglamos la tabla de Sponsorship Register (nombres y valores)
   if ($("#registerBody")) {
     $("#registerBody").innerHTML = s.map(x => `
       <tr>
         <td>${safe(x.date || x.created_at, "")}</td>
         <td>${safe(x.order || x.name, "")}</td>
-        <td>${safe(x.recipient || x.customer, "")}</td>
-        <td>${safe(x.product || x.sku, "")}</td>
-        <td>${safe(x.qty || x.quantity, 0)}</td>
-        <td>${money(x.retail || x.value || 0)}</td>
-        <td>${money(x.cost || 0)}</td>
+        <td>${getCustomerName(x.recipient || x.customer)}</td>
+        <td>${safe(x.product || x.sku || (x.line_items && x.line_items[0] ? x.line_items[0].name : ""), "")}</td>
+        <td>${getNum(x.qty || x.quantity || 0)}</td>
+        <td>${money(getNum(x.retail || x.value || x.total_price))}</td>
+        <td>${money(getNum(x.cost))}</td>
         <td>${badge(x.type)}</td>
         <td>${safe(x.detected_by || x.rule, "Auto")}</td>
         <td>${badge(x.status || x.match_status)}</td>
       </tr>`).join("");
   }
 
-  // Renderizar la tabla de Accounting
   if ($("#acctBody")) {
     $("#acctBody").innerHTML = a.slice(0, 500).map(x => `
       <tr>
@@ -105,14 +119,34 @@ function render() {
         <td>${safe(x.transaction || x.txn, "")}</td>
         <td>${safe(x.account, "")}</td>
         <td>${safe(x.memo || x.ref, "-")}</td>
-        <td>${money(x.amount || x.value || x.total || 0)}</td>
+        <td>${money(getNum(x.amount || x.value || x.total))}</td>
         <td>${safe(x.linked || x.shopify_id, "-")}</td>
         <td>${badge(x.status || x.match_status)}</td>
       </tr>`).join("");
   }
+
+  // 3. Añadimos la lógica para renderizar la Review Queue
+  if ($("#exceptionCards")) {
+    const reviewItems = s.filter(x => (x.status || x.match_status || "").toLowerCase().includes("review") || (x.type || "").toLowerCase().includes("pending"));
+    
+    if(reviewItems.length === 0) {
+        $("#exceptionCards").innerHTML = `<p class="muted">No items currently require manual review.</p>`;
+    } else {
+        $("#exceptionCards").innerHTML = reviewItems.map(x => `
+          <div class="exception">
+            <h3>Order ${safe(x.order || x.name)}</h3>
+            <p>Needs review for: <b>${safe(x.type, "Classification")}</b></p>
+            <small>Detected: ${safe(x.detected_by || x.rule, "Auto")}</small>
+          </div>
+        `).join("");
+    }
+    
+    if ($("#reviewCount")) {
+        $("#reviewCount").innerText = reviewItems.length + " items";
+    }
+  }
 }
 
-// Envuelve todo en DOMContentLoaded para que los menús no fallen al inicio
 document.addEventListener("DOMContentLoaded", () => {
   const themeToggleBtn = document.getElementById("themeToggle");
   if (themeToggleBtn) {
@@ -121,14 +155,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Navegación corregida: ahora se inicializa correctamente al cargar
   document.querySelectorAll(".nav").forEach(btn => {
     btn.addEventListener("click", () => {
-      // Remover clase active de todos los botones y vistas
       document.querySelectorAll(".nav").forEach(x => x.classList.remove("active"));
       document.querySelectorAll(".view").forEach(x => x.classList.remove("active-view"));
       
-      // Añadir clase active al botón actual y a la vista objetivo
       btn.classList.add("active");
       const targetView = document.getElementById(btn.dataset.view);
       if (targetView) {

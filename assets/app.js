@@ -2,7 +2,10 @@ let DATA={sponsorships:[],accounting:[]};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(n||0);
 const q=d=>`Q${Math.floor(new Date(d+'T00:00:00').getMonth()/3)+1}`;
-const badge=s=>`<span class="badge ${s.toLowerCase().replaceAll(' ','-')}">${s}</span>`;
+const badge=s=>{
+  const safe = String(s ?? 'Unknown');
+  return `<span class="badge ${safe.toLowerCase().replaceAll(' ','-')}">${safe}</span>`;
+};
 
 function applyTheme(theme){
   document.body.setAttribute('data-theme', theme);
@@ -83,21 +86,23 @@ function renderRegister(rows){
 
 function renderAccounting(){
   const a=DATA.accounting;
-  const total=a.reduce((x,r)=>x+r.amount,0), matched=a.filter(r=>r.status==='Matched'), unmatched=a.filter(r=>r.status!=='Matched');
+  const total=a.reduce((x,r)=>x+Number(r.amount||r.value||0),0),
+        matched=a.filter(r=>String(r.status||r.match||'').toLowerCase()==='matched'),
+        unmatched=a.filter(r=>String(r.status||r.match||'').toLowerCase()!=='matched');
   $('#acctKpis').innerHTML=[
     ['QB Evidence',a.length,'Displayed QuickBooks transactions'],
     ['Accounting Amount',money(total),'All QB rows shown'],
     ['Matched Records',matched.length,'Linked to Shopify activity'],
-    ['Matched Amount',money(matched.reduce((x,r)=>x+r.amount,0)),'Reconciled evidence'],
+    ['Matched Amount',money(matched.reduce((x,r)=>x+Number(r.amount||r.value||0),0)),'Reconciled evidence'],
     ['Unlinked QB',unmatched.length,'Still needs review']
   ].map(x=>`<div class="kpi"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="hint">${x[2]}</div></div>`).join('');
 
-  $('#acctBody').innerHTML=a.length ? a.map(r=>`<tr><td>${r.date}</td><td>${r.vendor}</td><td>${r.txn}</td><td>${r.account}</td><td>${r.ref}</td><td>${money(r.amount)}</td><td>${r.linked||'—'}</td><td>${badge(r.status)}</td></tr>`).join('') : `<tr><td colspan="8" class="muted">No accounting rows available.</td></tr>`;
+  $('#acctBody').innerHTML=a.length ? a.map(r=>`<tr><td>${r.date||''}</td><td>${r.vendor||r.name||''}</td><td>${r.txn||r.transaction||''}</td><td>${r.account||''}</td><td>${r.ref||''}</td><td>${money(r.amount||r.value||0)}</td><td>${r.linked||'—'}</td><td>${badge(r.status||r.match)}</td></tr>`).join('') : `<tr><td colspan="8" class="muted">No accounting rows available.</td></tr>`;
 }
 
 function renderExceptions(rows){
   const x=rows.filter(r=>r.match!=='Matched'||r.confidence!=='High');
-  const qb=DATA.accounting.filter(r=>r.status==='QB Only');
+  const qb=DATA.accounting.filter(r=>String(r.status||r.match||'').toLowerCase()==='qb only');
   $('#exceptionCards').innerHTML=[
     ...x.map(r=>({title:`${r.order} · ${r.recipient}`,type:r.match,body:`${r.product} (${r.sku}). Detection: ${r.detectedBy}. Confidence: ${r.confidence}.`,small:'Shopify-derived record'})),
     ...qb.map(r=>({title:`${r.txn} · ${r.vendor}`,type:r.status,body:`${r.account} — ${money(r.amount)}. Reference: ${r.ref}. No Shopify order has been linked yet.`,small:'QuickBooks-derived record'}))
@@ -129,7 +134,7 @@ async function loadDashboard(){
   // Normalize connected Shopify/QuickBooks exports
   DATA={
     sponsorships: d.sponsorships || d.shopify?.sponsorships || d.shopify?.orders || [],
-    accounting: d.accounting || d.quickbooks?.transactions || d.quickbooks?.accounting || []
+    accounting: d.accounting || d.quickbooks?.transactions || d.quickbooks?.accounting || d.quickbooks?.ledger || []
   };
 
   render();

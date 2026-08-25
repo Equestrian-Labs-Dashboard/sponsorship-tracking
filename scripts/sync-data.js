@@ -34,7 +34,10 @@ console.log(
       bills: await readSheet("QuickBooks Bill"),
       vendorBalance: await readSheet("QuickBooks Vendor Balance Detail Import"),
       ledger: await readSheet("QuickBooks General Ledger Import"),
-      transactions: await readSheet("QuickBooks Transaction List By Vendor"),
+     transactions:
+await readSheet(
+"QuickBooks Transaction List By Vendor Import"
+),
       payables: await readSheet("Payables")
     },
     shopify: {

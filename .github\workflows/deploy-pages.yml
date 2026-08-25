@@ -62,7 +62,10 @@ jobs:
 
         npm run sync-data
 
-
+- name: Verify generated files
+  run: |
+    ls -la
+    ls -la data
 
     - name: Configure Pages
       uses: actions/configure-pages@v5

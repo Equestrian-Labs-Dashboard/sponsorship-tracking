@@ -1,7 +1,8 @@
 {
+  "name": "sponsorship-tracking",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "test": "node test-connection.js",
     "sync-data": "node scripts/sync-data.js"
   },
   "dependencies": {

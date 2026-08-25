@@ -1,5 +1,14 @@
-fetch('data/dashboard.json').then(r=>r.json()).then(d=>{ window.REAL_DASHBOARD=d; DATA.sponsorships=d.accounting?.bills || []; DATA.accounting=d.accounting || {}; render(); }).catch(err=>console.error('dashboard.json error',err));
-let DATA={sponsorships:[],accounting:[]};
+let DATA={sponsorships:[],accounting:{},shopify:{}};
+
+fetch('data/dashboard.json')
+.then(r=>r.json())
+.then(d=>{
+  DATA.accounting=d.quickbooks || {};
+  DATA.shopify=d.shopify || {};
+  DATA.sponsorships=d.quickbooks?.bills || [];
+  render();
+})
+.catch(e=>console.error('dashboard.json error',e));
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(n||0);
 const q=d=>`Q${Math.floor(new Date(d+'T00:00:00').getMonth()/3)+1}`;

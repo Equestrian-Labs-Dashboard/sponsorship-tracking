@@ -30,9 +30,16 @@ function badge(v) {
 function normalize(d) {
   const sponsors = d.sponsorships || d.shopify?.sponsorships || d.shopify?.corro || d.shopify?.orders || [];
   const q = d.accounting || d.quickbooks?.transactions || d.quickbooks?.ledger || d.quickbooks?.bills || [];
+  
+  const filterByDate = items => items.filter(x => {
+    const dStr = x.date || x.created_at || x.txn_date;
+    if (!dStr) return true;
+    return dStr >= "2026-07-01";
+  });
+
   return {
-    sponsorships: Array.isArray(sponsors) ? sponsors : [],
-    accounting: Array.isArray(q) ? q : [],
+    sponsorships: Array.isArray(sponsors) ? filterByDate(sponsors) : [],
+    accounting: Array.isArray(q) ? filterByDate(q) : [],
     raw: d
   };
 }
@@ -96,19 +103,25 @@ function render() {
 
   // 2. Arreglamos la tabla de Sponsorship Register (nombres y valores)
   if ($("#registerBody")) {
-    $("#registerBody").innerHTML = s.map(x => `
+    $("#registerBody").innerHTML = s.map(x => {
+      const retail = getNum(x.retail || x.value || x.total_price);
+      const cost = getNum(x.cost);
+      const gm = retail - cost;
+      
+      return `
       <tr>
         <td>${safe(x.date || x.created_at, "")}</td>
         <td>${safe(x.order || x.name, "")}</td>
         <td>${getCustomerName(x.recipient || x.customer)}</td>
         <td>${safe(x.product || x.sku || (x.line_items && x.line_items[0] ? x.line_items[0].name : ""), "")}</td>
         <td>${getNum(x.qty || x.quantity || 0)}</td>
-        <td>${money(getNum(x.retail || x.value || x.total_price))}</td>
-        <td>${money(getNum(x.cost))}</td>
+        <td>${money(retail)}</td>
+        <td>${money(cost)}</td>
+        <td>${money(gm)}</td>
         <td>${badge(x.type)}</td>
         <td>${safe(x.detected_by || x.rule, "Auto")}</td>
-        <td>${badge(x.status || x.match_status)}</td>
-      </tr>`).join("");
+      </tr>`;
+    }).join("");
   }
 
   if ($("#acctBody")) {

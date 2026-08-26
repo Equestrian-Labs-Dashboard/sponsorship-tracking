@@ -27,6 +27,22 @@ function badge(v) {
   return `<span class="badge ${className}">${s}</span>`;
 }
 
+let FILTERS = { from: "", to: "", quarter: "all", type: "all", match: "all" };
+
+function detectType(x) {
+  if (x.type) return x.type;
+  let str = (x.tags || "") + " " + (x.note || "") + " " + JSON.stringify(x.note_attributes || []) + " " + JSON.stringify(x.discount_codes || []);
+  str = str.toLowerCase();
+  if (str.includes("sponsorship") || str.includes("sponsored")) return "Sponsorship";
+  if (str.includes("seed")) return "Product Seeding";
+  if (str.includes("gift") || str.includes("giveaway")) return "Gift / Giveaway";
+  if (str.includes("influencer") || str.includes("ambassador")) return "Influencer / Ambassador";
+  if (str.includes("sample") || str.includes("review")) return "Samples / Reviews";
+  if (str.includes("press") || str.includes(" pr ")) return "PR / Press";
+  if (str.includes("social") || str.includes("creator")) return "Social / Content Creator";
+  return "Pending";
+}
+
 function normalize(d) {
   const sponsors = d.sponsorships || d.shopify?.sponsorships || d.shopify?.corro || d.shopify?.orders || [];
   const q = d.accounting || d.quickbooks?.transactions || d.quickbooks?.ledger || d.quickbooks?.bills || [];
@@ -37,8 +53,20 @@ function normalize(d) {
     return dStr >= "2026-07-01";
   });
 
+  const normalizedSponsors = filterByDate(sponsors).map(x => {
+    let units = getNum(x.qty || x.quantity || 0);
+    if (!units && x.line_items) {
+      units = x.line_items.reduce((sum, item) => sum + getNum(item.quantity), 0);
+    }
+    x.units_calc = units;
+    x.retail_calc = getNum(x.retail || x.value || x.total_price);
+    x.cost_calc = getNum(x.cost || 0);
+    x.type_calc = detectType(x);
+    return x;
+  });
+
   return {
-    sponsorships: Array.isArray(sponsors) ? filterByDate(sponsors) : [],
+    sponsorships: normalizedSponsors,
     accounting: Array.isArray(q) ? filterByDate(q) : [],
     raw: d
   };
@@ -59,7 +87,22 @@ async function loadDashboard() {
 }
 
 function render() {
-  const s = DATA.sponsorships, a = DATA.accounting;
+  let s = DATA.sponsorships;
+  let a = DATA.accounting;
+  
+  // Apply filters
+  if (FILTERS.from) s = s.filter(x => (x.date || x.created_at || "") >= FILTERS.from);
+  if (FILTERS.to) s = s.filter(x => (x.date || x.created_at || "") <= FILTERS.to);
+  if (FILTERS.type !== "all") s = s.filter(x => x.type_calc === FILTERS.type);
+  if (FILTERS.match !== "all") s = s.filter(x => (x.status || x.match_status || "Pending") === FILTERS.match);
+  
+  if (FILTERS.quarter !== "all") {
+    s = s.filter(x => {
+      const m = new Date(x.date || x.created_at).getMonth() + 1;
+      const q = Math.ceil(m / 3);
+      return `Q${q}` === FILTERS.quarter;
+    });
+  }
   
   // 1. Arreglamos los cálculos numéricos en los KPIs
   if ($("#kpis")) {
@@ -76,7 +119,7 @@ function render() {
   s.forEach(x => {
     let m = safe(x.date || x.created_at, "Unknown").slice(0, 7);
     months[m] = (months[m] || 0) + 1;
-    let t = safe(x.type, "Other");
+    let t = safe(x.type_calc, "Other");
     types[t] = (types[t] || 0) + 1;
   });
 
@@ -104,8 +147,8 @@ function render() {
   // 2. Arreglamos la tabla de Sponsorship Register (nombres y valores)
   if ($("#registerBody")) {
     $("#registerBody").innerHTML = s.map(x => {
-      const retail = getNum(x.retail || x.value || x.total_price);
-      const cost = getNum(x.cost);
+      const retail = x.retail_calc;
+      const cost = x.cost_calc;
       const gm = retail - cost;
       
       return `
@@ -113,12 +156,12 @@ function render() {
         <td>${safe(x.date || x.created_at, "")}</td>
         <td>${safe(x.order || x.name, "")}</td>
         <td>${getCustomerName(x.recipient || x.customer)}</td>
-        <td>${safe(x.product || x.sku || (x.line_items && x.line_items[0] ? x.line_items[0].name : ""), "")}</td>
-        <td>${getNum(x.qty || x.quantity || 0)}</td>
+        <td>${safe(x.product || x.sku || (x.line_items && x.line_items[0] ? x.line_items[0].name : ""), "N/A")}</td>
+        <td>${x.units_calc}</td>
         <td>${money(retail)}</td>
         <td>${money(cost)}</td>
         <td>${money(gm)}</td>
-        <td>${badge(x.type)}</td>
+        <td>${badge(x.type_calc)}</td>
         <td>${safe(x.detected_by || x.rule, "Auto")}</td>
       </tr>`;
     }).join("");
@@ -140,7 +183,7 @@ function render() {
 
   // 3. Añadimos la lógica para renderizar la Review Queue
   if ($("#exceptionCards")) {
-    const reviewItems = s.filter(x => (x.status || x.match_status || "").toLowerCase().includes("review") || (x.type || "").toLowerCase().includes("pending"));
+    const reviewItems = s.filter(x => (x.status || x.match_status || "").toLowerCase().includes("review") || (x.type_calc || "").toLowerCase().includes("pending"));
     
     if(reviewItems.length === 0) {
         $("#exceptionCards").innerHTML = `<p class="muted">No items currently require manual review.</p>`;
@@ -148,7 +191,7 @@ function render() {
         $("#exceptionCards").innerHTML = reviewItems.map(x => `
           <div class="exception">
             <h3>Order ${safe(x.order || x.name)}</h3>
-            <p>Needs review for: <b>${safe(x.type, "Classification")}</b></p>
+            <p>Needs review for: <b>${safe(x.type_calc, "Classification")}</b></p>
             <small>Detected: ${safe(x.detected_by || x.rule, "Auto")}</small>
           </div>
         `).join("");
@@ -180,6 +223,31 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
+  const updateFilters = () => {
+    if ($("#from")) FILTERS.from = $("#from").value;
+    if ($("#to")) FILTERS.to = $("#to").value;
+    if ($("#quarter")) FILTERS.quarter = $("#quarter").value;
+    if ($("#type")) FILTERS.type = $("#type").value;
+    if ($("#match")) FILTERS.match = $("#match").value;
+    render();
+  };
+
+  ["#from", "#to", "#quarter", "#type", "#match"].forEach(sel => {
+    if ($(sel)) $(sel).addEventListener("change", updateFilters);
+  });
+  
+  if ($("#reset")) {
+    $("#reset").addEventListener("click", () => {
+      FILTERS = { from: "", to: "", quarter: "all", type: "all", match: "all" };
+      if ($("#from")) $("#from").value = "";
+      if ($("#to")) $("#to").value = "";
+      if ($("#quarter")) $("#quarter").value = "all";
+      if ($("#type")) $("#type").value = "all";
+      if ($("#match")) $("#match").value = "all";
+      render();
+    });
+  }
 
   loadDashboard();
 });

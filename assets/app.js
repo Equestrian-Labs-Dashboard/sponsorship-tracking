@@ -106,11 +106,17 @@ function render() {
   
   // 1. Arreglamos los cálculos numéricos en los KPIs
   if ($("#kpis")) {
-    const totalRetail = s.reduce((t, x) => t + getNum(x.retail || x.value || x.amount || x.total_price), 0);
+    const totalRetail = s.reduce((t, x) => t + (x.retail_calc || 0), 0);
+    const totalUnits = s.reduce((t, x) => t + (x.units_calc || 0), 0);
+    const totalCost = s.reduce((t, x) => t + (x.cost_calc || 0), 0);
+    const totalGM = totalRetail - totalCost;
+
     $("#kpis").innerHTML = `
       <div class="kpi"><div class="label">Sponsorships</div><div class="value">${s.length}</div></div>
-      <div class="kpi"><div class="label">Accounting</div><div class="value">${a.length}</div></div>
-      <div class="kpi"><div class="label">Retail Value</div><div class="value">${money(totalRetail)}</div></div>`;
+      <div class="kpi"><div class="label">Units</div><div class="value">${totalUnits}</div></div>
+      <div class="kpi"><div class="label">Retail Value</div><div class="value">${money(totalRetail)}</div></div>
+      <div class="kpi"><div class="label">Inventory Value</div><div class="value">${money(totalCost)}</div></div>
+      <div class="kpi"><div class="label">GM</div><div class="value">${money(totalGM)}</div></div>`;
   }
 
   const months = {}; 

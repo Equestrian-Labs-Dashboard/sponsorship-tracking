@@ -27,7 +27,7 @@ function badge(v) {
   return `<span class="badge ${className}">${s}</span>`;
 }
 
-let FILTERS = { month: "all", quarter: "all", type: "all", match: "all" };
+let FILTERS = { month: "all", quarter: "all", type: "Sponsorship", match: "all" };
 
 function detectType(x) {
   if (x.type) return x.type;
@@ -48,9 +48,7 @@ function normalize(d) {
   const q = d.accounting || d.quickbooks?.transactions || d.quickbooks?.ledger || d.quickbooks?.bills || [];
   
   const filterByDate = items => items.filter(x => {
-    const dStr = x.date || x.created_at || x.txn_date;
-    if (!dStr) return true;
-    return dStr >= "2026-07-01";
+    return true; // Quitamos el filtro estricto de fecha para que permita ver todo el historial
   });
 
   const normalizedSponsors = filterByDate(sponsors).map(x => {
@@ -284,10 +282,10 @@ document.addEventListener("DOMContentLoaded", () => {
   
   if ($("#reset")) {
     $("#reset").addEventListener("click", () => {
-      FILTERS = { month: "all", quarter: "all", type: "all", match: "all" };
+      FILTERS = { month: "all", quarter: "all", type: "Sponsorship", match: "all" };
       if ($("#month")) $("#month").value = "all";
       if ($("#quarter")) $("#quarter").value = "all";
-      if ($("#type")) $("#type").value = "all";
+      if ($("#type")) $("#type").value = "Sponsorship";
       if ($("#match")) $("#match").value = "all";
       render();
     });

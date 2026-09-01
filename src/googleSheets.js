@@ -97,24 +97,24 @@ export async function readSheet(sheetName){
 
 
 
-    const headers =
-    rows[0];
+    let headerIndex = 0;
+    // Find the row that actually contains the headers (Coefficient imports often put them in row 4 or 5)
+    for (let i = 0; i < Math.min(10, rows.length); i++) {
+        const rowString = (rows[i] || []).join("").toLowerCase();
+        if (rowString.includes("date") || rowString.includes("transaction") || rowString.includes("amount") || rowString.includes("type")) {
+            headerIndex = i;
+            break;
+        }
+    }
 
+    const headers = rows[headerIndex];
 
-    return rows.slice(1).map(row=>{
-
+    return rows.slice(headerIndex + 1).map(row=>{
         let obj={};
-
-
         headers.forEach((h,i)=>{
-
             obj[h]=row[i] || "";
-
         });
-
-
         return obj;
-
     });
 
 }

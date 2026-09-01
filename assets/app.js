@@ -121,7 +121,7 @@ function render() {
       <div class="kpi"><div class="label">Sponsorships</div><div class="value">${s.length}</div></div>
       <div class="kpi"><div class="label">Units</div><div class="value">${totalUnits}</div></div>
       <div class="kpi"><div class="label">Retail Value</div><div class="value">${money(totalRetail)}</div></div>
-      <div class="kpi"><div class="label">Inventory Value</div><div class="value">${money(totalCost)}</div></div>
+      <div class="kpi"><div class="label">True Cost</div><div class="value">${money(totalCost)}</div></div>
       <div class="kpi"><div class="label">GM</div><div class="value">${money(totalGM)}</div></div>`;
   }
 
@@ -259,5 +259,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  loadDashboard();
+  loadDashboard().then(() => {
+    // Populate month options dynamically
+    if ($("#month")) {
+      const monthsSet = new Set(DATA.sponsorships.map(x => (x.date || x.created_at || "").slice(0, 7)).filter(Boolean));
+      const sortedMonths = Array.from(monthsSet).sort();
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      let options = `<option value="all">All months</option>`;
+      sortedMonths.forEach(m => {
+        const [yyyy, mm] = m.split("-");
+        options += `<option value="${m}">${monthNames[parseInt(mm)-1]} ${yyyy}</option>`;
+      });
+      $("#month").innerHTML = options;
+      $("#month").value = FILTERS.month;
+    }
+    
+    // Populate types dynamically
+    if ($("#type")) {
+      const typeSet = new Set(DATA.sponsorships.map(x => x.type_calc).filter(Boolean));
+      let options = `<option value="all">All types</option>`;
+      Array.from(typeSet).sort().forEach(t => {
+        options += `<option value="${t}">${t}</option>`;
+      });
+      $("#type").innerHTML = options;
+      $("#type").value = FILTERS.type;
+    }
+  });
 });

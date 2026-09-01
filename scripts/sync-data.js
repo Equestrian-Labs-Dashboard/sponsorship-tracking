@@ -8,10 +8,11 @@ async function shopify(store, token, name) {
   }
 
   let allOrders = [];
-  let url = `https://${store}/admin/api/2026-01/orders.json?status=any&limit=250`;
+  // Agregamos created_at_min para buscar desde Julio (el inicio del programa) y asegurarnos de no perder ninguna orden de Sponsorship
+  let url = `https://${store}/admin/api/2026-01/orders.json?status=any&limit=250&created_at_min=2026-07-01T00:00:00Z`;
   
-  for (let i = 0; i < 10; i++) { // Fetch up to 10 pages (2500 orders)
-    if (!url) break;
+  // Bucle infinito hasta que se acaben las pginas (para traer todo el historial desde Julio)
+  while (url) {
     const response = await fetch(url, {
       headers: { "X-Shopify-Access-Token": token, "Content-Type": "application/json" }
     });

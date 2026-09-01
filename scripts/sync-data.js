@@ -20,7 +20,15 @@ async function shopify(store, token, name) {
     if (!response.ok) throw new Error(`Shopify ${name}: ${response.status}`);
     
     const data = await response.json();
-    if (data.orders) allOrders = allOrders.concat(data.orders);
+    if (data.orders) {
+      // Filtrar basura en caliente para evitar que la RAM se llene y explote (RangeError: Invalid string length)
+      const filtered = data.orders.filter(x => {
+        const str = ((x.tags || "") + " " + (x.note || "") + " " + JSON.stringify(x.note_attributes || []) + " " + JSON.stringify(x.discount_codes || [])).toLowerCase();
+        const hasTag = str.includes("sponsorship") || str.includes("sponsored") || str.includes("seed") || str.includes("gift") || str.includes("giveaway") || str.includes("influencer") || str.includes("ambassador") || str.includes("sample") || str.includes("review") || str.includes("press") || str.includes(" pr ") || str.includes("social") || str.includes("creator");
+        return hasTag || Number(x.total_price) === 0;
+      });
+      allOrders = allOrders.concat(filtered);
+    }
     
     const link = response.headers.get("link");
     if (link && link.includes('rel="next"')) {

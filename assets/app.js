@@ -70,8 +70,27 @@ function normalize(d) {
     x.retail_calc = retail;
     
     // Attempt to extract cost, or use a 20% estimate if completely missing since Shopify doesn't include it directly
-    let c = getNum(x.cost || x.Cost || x.cogs || x["Total Cost"] || 0);
-    if (c === 0 && x.retail_calc > 0) c = x.retail_calc * 0.20; 
+    let c = 0;
+    if (x.line_items && x.line_items.length > 0) {
+      // Use exact COGS from the GraphQL injection if available
+      let exactCostSum = 0;
+      let hasExactCost = false;
+      x.line_items.forEach(item => {
+        if (item.exact_cost !== undefined) {
+          exactCostSum += getNum(item.exact_cost) * getNum(item.quantity);
+          hasExactCost = true;
+        }
+      });
+      if (hasExactCost) {
+        c = exactCostSum;
+      }
+    }
+    
+    // Fallbacks if exact_cost wasn't available
+    if (c === 0) {
+      c = getNum(x.cost || x.Cost || x.cogs || x["Total Cost"] || 0);
+    }
+    
     x.cost_calc = c;
     
     x.type_calc = detectType(x);

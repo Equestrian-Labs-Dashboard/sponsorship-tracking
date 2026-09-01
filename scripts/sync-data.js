@@ -29,6 +29,71 @@ async function shopify(store, token, name) {
       url = null;
     }
   }
+
+  // --- NUEVA CONEXIÓN EXTRA PARA COGS EXACTO ---
+  // Recopilamos todos los variant_ids únicos de las órdenes
+  const variantIds = new Set();
+  allOrders.forEach(o => {
+    o.line_items.forEach(item => {
+      if (item.variant_id) variantIds.add(item.variant_id);
+    });
+  });
+
+  const costMap = {};
+  const vIdsArray = Array.from(variantIds);
+  
+  // Dividimos en bloques de 100 para no exceder el límite de nodos de GraphQL
+  for (let i = 0; i < vIdsArray.length; i += 100) {
+    const chunk = vIdsArray.slice(i, i + 100);
+    const gidList = chunk.map(id => `"gid://shopify/ProductVariant/${id}"`).join(",");
+    
+    const query = `
+      query {
+        nodes(ids: [${gidList}]) {
+          ... on ProductVariant {
+            legacyResourceId
+            inventoryItem {
+              unitCost {
+                amount
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    try {
+      const gqlRes = await fetch(`https://${store}/admin/api/2026-01/graphql.json`, {
+        method: 'POST',
+        headers: {
+          "X-Shopify-Access-Token": token,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ query })
+      });
+      const gqlData = await gqlRes.json();
+      
+      if (gqlData.data && gqlData.data.nodes) {
+        gqlData.data.nodes.forEach(node => {
+          if (node && node.legacyResourceId && node.inventoryItem && node.inventoryItem.unitCost) {
+            costMap[node.legacyResourceId] = parseFloat(node.inventoryItem.unitCost.amount);
+          }
+        });
+      }
+    } catch (e) {
+      console.log(`Error obteniendo COGS en ${name}:`, e.message);
+    }
+  }
+
+  // Inyectamos el costo exacto en cada line_item
+  allOrders.forEach(o => {
+    o.line_items.forEach(item => {
+      if (item.variant_id && costMap[item.variant_id] !== undefined) {
+        item.exact_cost = costMap[item.variant_id];
+      }
+    });
+  });
+
   return allOrders;
 }
 

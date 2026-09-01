@@ -161,7 +161,7 @@ function render() {
       <div class="kpi"><div class="label">Units</div><div class="value">${totalUnits}</div></div>
       <div class="kpi"><div class="label">Retail Value</div><div class="value">${money(totalRetail)}</div></div>
       <div class="kpi"><div class="label">COGS</div><div class="value">${money(totalCost)}</div></div>
-      <div class="kpi"><div class="label">GM</div><div class="value">${money(totalGM)}</div></div>`;
+      <div class="kpi"><div class="label">Gross Profit</div><div class="value">${money(totalGM)}</div></div>`;
   }
 
   const months = {}; 

@@ -52,7 +52,15 @@ function normalize(d) {
     sponsors = d.sponsorships || [];
   }
   
-  const q = d.accounting || d.quickbooks?.transactions || d.quickbooks?.ledger || d.quickbooks?.bills || [];
+  let q = [];
+  if (d.accounting) {
+    q = d.accounting;
+  } else if (d.quickbooks) {
+    if (d.quickbooks.transactions && d.quickbooks.transactions.length) q = q.concat(d.quickbooks.transactions);
+    if (d.quickbooks.ledger && d.quickbooks.ledger.length) q = q.concat(d.quickbooks.ledger);
+    if (d.quickbooks.bills && d.quickbooks.bills.length) q = q.concat(d.quickbooks.bills);
+    if (d.quickbooks.payables && d.quickbooks.payables.length) q = q.concat(d.quickbooks.payables);
+  }
   
   const filterByDate = items => items.filter(x => {
     return true; // Quitamos el filtro estricto de fecha para que permita ver todo el historial
@@ -155,13 +163,15 @@ function render() {
     const totalUnits = s.reduce((t, x) => t + (x.units_calc || 0), 0);
     const totalCost = s.reduce((t, x) => t + (x.cost_calc || 0), 0);
     const totalGM = totalRetail - totalCost;
+    const gmPercent = totalRetail > 0 ? ((totalGM / totalRetail) * 100).toFixed(1) + "%" : "0%";
 
     $("#kpis").innerHTML = `
       <div class="kpi"><div class="label">Total Orders</div><div class="value">${s.length}</div></div>
       <div class="kpi"><div class="label">Units</div><div class="value">${totalUnits}</div></div>
       <div class="kpi"><div class="label">Retail Value</div><div class="value">${money(totalRetail)}</div></div>
       <div class="kpi"><div class="label">COGS</div><div class="value">${money(totalCost)}</div></div>
-      <div class="kpi"><div class="label">Gross Profit</div><div class="value">${money(totalGM)}</div></div>`;
+      <div class="kpi"><div class="label">Gross Profit</div><div class="value">${money(totalGM)}</div></div>
+      <div class="kpi"><div class="label">GM %</div><div class="value">${gmPercent}</div></div>`;
   }
 
   const months = {}; 
@@ -213,7 +223,6 @@ function render() {
         <td>${money(cost)}</td>
         <td>${money(gm)}</td>
         <td>${badge(x.type_calc)}</td>
-        <td>${safe(x.detected_by || x.rule, "Auto")}</td>
       </tr>`;
     }).join("");
   }

@@ -27,7 +27,7 @@ function badge(v) {
   return `<span class="badge ${className}">${s}</span>`;
 }
 
-let FILTERS = { from: "", to: "", quarter: "all", type: "all", match: "all" };
+let FILTERS = { month: "all", quarter: "all", type: "all", match: "all" };
 
 function detectType(x) {
   if (x.type) return x.type;
@@ -60,7 +60,12 @@ function normalize(d) {
     }
     x.units_calc = units;
     x.retail_calc = getNum(x.retail || x.value || x.total_price);
-    x.cost_calc = getNum(x.cost || 0);
+    
+    // Attempt to extract cost, or use a 20% estimate if completely missing since Shopify doesn't include it directly
+    let c = getNum(x.cost || x.Cost || x.cogs || x["Total Cost"] || 0);
+    if (c === 0 && x.retail_calc > 0) c = x.retail_calc * 0.20; 
+    x.cost_calc = c;
+    
     x.type_calc = detectType(x);
     return x;
   });
@@ -91,8 +96,9 @@ function render() {
   let a = DATA.accounting;
   
   // Apply filters
-  if (FILTERS.from) s = s.filter(x => (x.date || x.created_at || "") >= FILTERS.from);
-  if (FILTERS.to) s = s.filter(x => (x.date || x.created_at || "") <= FILTERS.to);
+  if (FILTERS.month !== "all") {
+    s = s.filter(x => (x.date || x.created_at || "").startsWith(FILTERS.month));
+  }
   if (FILTERS.type !== "all") s = s.filter(x => x.type_calc === FILTERS.type);
   if (FILTERS.match !== "all") s = s.filter(x => (x.status || x.match_status || "Pending") === FILTERS.match);
   
@@ -176,14 +182,14 @@ function render() {
   if ($("#acctBody")) {
     $("#acctBody").innerHTML = a.slice(0, 500).map(x => `
       <tr>
-        <td>${safe(x.date || x.txn_date, "")}</td>
-        <td>${safe(x.vendor || x.name, "")}</td>
-        <td>${safe(x.transaction || x.txn, "")}</td>
-        <td>${safe(x.account, "")}</td>
-        <td>${safe(x.memo || x.ref, "-")}</td>
-        <td>${money(getNum(x.amount || x.value || x.total))}</td>
-        <td>${safe(x.linked || x.shopify_id, "-")}</td>
-        <td>${badge(x.status || x.match_status)}</td>
+        <td>${safe(x.Date || x.date || x.txn_date || x["Txn Date"] || x["Transaction Date"], "")}</td>
+        <td>${safe(x.Vendor || x.vendor || x.name || x["Name"], "")}</td>
+        <td>${safe(x.Transaction || x.transaction || x.txn || x["Transaction Type"] || x["Type"], "")}</td>
+        <td>${safe(x.Account || x.account, "")}</td>
+        <td>${safe(x.Memo || x.memo || x.ref || x["Memo/Description"] || x["Ref"], "-")}</td>
+        <td>${money(getNum(x.Amount || x.amount || x.value || x.total || x["Total"] || x["Paid Amount"]))}</td>
+        <td>${safe(x.Linked || x.linked || x.shopify_id || x["Num"], "-")}</td>
+        <td>${badge(x.Status || x.status || x.match_status)}</td>
       </tr>`).join("");
   }
 
@@ -231,23 +237,21 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const updateFilters = () => {
-    if ($("#from")) FILTERS.from = $("#from").value;
-    if ($("#to")) FILTERS.to = $("#to").value;
+    if ($("#month")) FILTERS.month = $("#month").value;
     if ($("#quarter")) FILTERS.quarter = $("#quarter").value;
     if ($("#type")) FILTERS.type = $("#type").value;
     if ($("#match")) FILTERS.match = $("#match").value;
     render();
   };
 
-  ["#from", "#to", "#quarter", "#type", "#match"].forEach(sel => {
+  ["#month", "#quarter", "#type", "#match"].forEach(sel => {
     if ($(sel)) $(sel).addEventListener("change", updateFilters);
   });
   
   if ($("#reset")) {
     $("#reset").addEventListener("click", () => {
-      FILTERS = { from: "", to: "", quarter: "all", type: "all", match: "all" };
-      if ($("#from")) $("#from").value = "";
-      if ($("#to")) $("#to").value = "";
+      FILTERS = { month: "all", quarter: "all", type: "all", match: "all" };
+      if ($("#month")) $("#month").value = "all";
       if ($("#quarter")) $("#quarter").value = "all";
       if ($("#type")) $("#type").value = "all";
       if ($("#match")) $("#match").value = "all";

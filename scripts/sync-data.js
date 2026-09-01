@@ -8,8 +8,8 @@ async function shopify(store, token, name) {
   }
 
   let allOrders = [];
-  // Agregamos created_at_min para buscar desde el inicio (2024) y asegurarnos de no perder ninguna orden
-  let url = `https://${store}/admin/api/2026-01/orders.json?status=any&limit=250&created_at_min=2024-01-01T00:00:00Z`;
+  // Agregamos created_at_min para buscar desde el inicio del 2026 exclusivamente
+  let url = `https://${store}/admin/api/2026-01/orders.json?status=any&limit=250&created_at_min=2026-01-01T00:00:00Z`;
   
   // Bucle infinito hasta que se acaben las pginas (para traer todo el historial desde Julio)
   while (url) {

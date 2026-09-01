@@ -44,7 +44,14 @@ function detectType(x) {
 }
 
 function normalize(d) {
-  const sponsors = d.sponsorships || d.shopify?.sponsorships || d.shopify?.corro || d.shopify?.orders || [];
+  let sponsors = [];
+  if (d.shopify) {
+    if (d.shopify.corro) sponsors = sponsors.concat(d.shopify.corro);
+    if (d.shopify.cavali) sponsors = sponsors.concat(d.shopify.cavali);
+  } else {
+    sponsors = d.sponsorships || [];
+  }
+  
   const q = d.accounting || d.quickbooks?.transactions || d.quickbooks?.ledger || d.quickbooks?.bills || [];
   
   const filterByDate = items => items.filter(x => {

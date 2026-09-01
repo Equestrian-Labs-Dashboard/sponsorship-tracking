@@ -95,6 +95,13 @@ function normalize(d) {
     
     x.type_calc = detectType(x);
     return x;
+  }).filter(x => {
+    // Hide standard customer sales (Pending type AND total_price > 0)
+    // Keep it if it has a 100% discount (total_price == 0) or if it has a Marketing tag.
+    if (x.type_calc === "Pending" && getNum(x.total_price) > 0) {
+      return false; 
+    }
+    return true;
   });
 
   return {

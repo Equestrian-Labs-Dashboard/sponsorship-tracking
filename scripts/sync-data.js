@@ -8,7 +8,7 @@ async function shopify(store, token, name) {
   }
 
   const response = await fetch(
-    `https://${store}/admin/api/2026-01/orders.json`,
+    `https://${store}/admin/api/2026-01/orders.json?status=any&limit=250`,
     {
       headers: {
         "X-Shopify-Access-Token": token,

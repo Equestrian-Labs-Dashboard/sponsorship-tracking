@@ -59,7 +59,15 @@ function normalize(d) {
       units = x.line_items.reduce((sum, item) => sum + getNum(item.quantity), 0);
     }
     x.units_calc = units;
-    x.retail_calc = getNum(x.retail || x.value || x.total_price);
+    
+    // Calculate retail from line items to ignore 100% order discounts
+    let retail = 0;
+    if (x.line_items && x.line_items.length > 0) {
+      retail = x.line_items.reduce((sum, item) => sum + (getNum(item.price) * getNum(item.quantity)), 0);
+    } else {
+      retail = getNum(x.retail || x.value || x.total_price);
+    }
+    x.retail_calc = retail;
     
     // Attempt to extract cost, or use a 20% estimate if completely missing since Shopify doesn't include it directly
     let c = getNum(x.cost || x.Cost || x.cogs || x["Total Cost"] || 0);

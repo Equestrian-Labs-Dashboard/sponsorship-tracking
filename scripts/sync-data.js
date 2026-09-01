@@ -7,22 +7,29 @@ async function shopify(store, token, name) {
     return [];
   }
 
-  const response = await fetch(
-    `https://${store}/admin/api/2026-01/orders.json?status=any&limit=250`,
-    {
-      headers: {
-        "X-Shopify-Access-Token": token,
-        "Content-Type": "application/json"
-      }
+  let allOrders = [];
+  let url = `https://${store}/admin/api/2026-01/orders.json?status=any&limit=250`;
+  
+  for (let i = 0; i < 10; i++) { // Fetch up to 10 pages (2500 orders)
+    if (!url) break;
+    const response = await fetch(url, {
+      headers: { "X-Shopify-Access-Token": token, "Content-Type": "application/json" }
+    });
+
+    if (!response.ok) throw new Error(`Shopify ${name}: ${response.status}`);
+    
+    const data = await response.json();
+    if (data.orders) allOrders = allOrders.concat(data.orders);
+    
+    const link = response.headers.get("link");
+    if (link && link.includes('rel="next"')) {
+      const match = link.match(/<([^>]+)>; rel="next"/);
+      url = match ? match[1] : null;
+    } else {
+      url = null;
     }
-  );
-
-  if (!response.ok) {
-    throw new Error(`Shopify ${name}: ${response.status}`);
   }
-
-  const data = await response.json();
-  return data.orders || [];
+  return allOrders;
 }
 
 async function main() {

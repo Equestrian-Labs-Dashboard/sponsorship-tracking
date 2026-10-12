@@ -1,336 +1,252 @@
-let DATA = { sponsorships: [], accounting: [], raw: {} };
+let DATA = { sponsorships: [], reviewQueue: [], accounting: [], meta: {} };
+let LOAD_ERROR = "";
+let FILTERS = { month: "all", quarter: "all", type: "all", search: "" };
 
-const $ = s => document.querySelector(s);
-const money = n => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(Number(n) || 0);
+const $ = selector => document.querySelector(selector);
+const number = value => {
+  const parsed = typeof value === "string" ? Number(value.replace(/[^0-9.-]+/g, "")) : Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+const hasNumber = value => value !== null && value !== undefined && value !== "" && Number.isFinite(Number(value));
+const money = value => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(number(value));
+const escapeHtml = value => String(value ?? "").replace(/[&<>'"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[character]);
+const sourceDate = value => String(value || "").slice(0, 10);
 
-function safe(v, d = "Unknown") { return String(v ?? d); }
-
-// Soluciona el error [object Object] extrayendo el nombre correctamente
-function getCustomerName(c) {
-  if (!c) return "";
-  if (typeof c === 'string') return c;
-  if (c.name) return c.name;
-  if (c.first_name || c.last_name) return `${c.first_name || ''} ${c.last_name || ''}`.trim();
-  return "Unknown";
+function className(value) {
+  return String(value || "not-linked").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
-// Limpia strings para que siempre se puedan sumar como números y no queden en $0
-function getNum(val) {
-  if (val === null || val === undefined) return 0;
-  if (typeof val === 'string') val = val.replace(/[^0-9.-]+/g,"");
-  return Number(val) || 0;
+function badge(value) {
+  const label = String(value || "Not linked");
+  return `<span class="badge ${className(label)}">${escapeHtml(label)}</span>`;
 }
 
-function badge(v) {
-  const s = safe(v, "Pending");
-  const className = s.toLowerCase().replaceAll(" ", "-");
-  return `<span class="badge ${className}">${s}</span>`;
+function orderKey(row) {
+  return String(row.order_name || row.order_id || "");
 }
 
-let FILTERS = { month: "all", quarter: "all", type: "Sponsorship", match: "all" };
-
-function detectType(x) {
-  if (x.type) return x.type;
-  let str = (x.tags || "") + " " + (x.note || "") + " " + JSON.stringify(x.note_attributes || []) + " " + JSON.stringify(x.discount_codes || []);
-  str = str.toLowerCase();
-  if (str.includes("sponsorship") || str.includes("sponsored")) return "Sponsorship";
-  if (str.includes("seed")) return "Product Seeding";
-  if (str.includes("gift") || str.includes("giveaway")) return "Gift / Giveaway";
-  if (str.includes("influencer") || str.includes("ambassador")) return "Influencer / Ambassador";
-  if (str.includes("sample") || str.includes("review")) return "Samples / Reviews";
-  if (str.includes("press") || str.includes(" pr ")) return "PR / Press";
-  if (str.includes("social") || str.includes("creator")) return "Social / Content Creator";
-  return "Pending";
-}
-
-function normalize(d) {
-  let sponsors = [];
-  if (d.shopify) {
-    if (d.shopify.corro) sponsors = sponsors.concat(d.shopify.corro);
-    if (d.shopify.cavali) sponsors = sponsors.concat(d.shopify.cavali);
-  } else {
-    sponsors = d.sponsorships || [];
-  }
-  
-  let q = [];
-  if (d.accounting) {
-    q = d.accounting;
-  } else if (d.quickbooks) {
-    if (d.quickbooks.transactions && d.quickbooks.transactions.length) q = q.concat(d.quickbooks.transactions);
-    if (d.quickbooks.ledger && d.quickbooks.ledger.length) q = q.concat(d.quickbooks.ledger);
-    if (d.quickbooks.bills && d.quickbooks.bills.length) q = q.concat(d.quickbooks.bills);
-    if (d.quickbooks.payables && d.quickbooks.payables.length) q = q.concat(d.quickbooks.payables);
-  }
-  
-  const filterByDate = items => items.filter(x => {
-    return true; // Quitamos el filtro estricto de fecha para que permita ver todo el historial
+function rowsForFilters() {
+  return DATA.sponsorships.filter(row => {
+    const month = sourceDate(row.created_at).slice(0, 7);
+    if (FILTERS.month !== "all" && month !== FILTERS.month) return false;
+    if (FILTERS.quarter !== "all") {
+      const date = new Date(row.created_at);
+      if (Number.isNaN(date.valueOf()) || `Q${Math.floor(date.getUTCMonth() / 3) + 1}` !== FILTERS.quarter) return false;
+    }
+    if (FILTERS.type !== "all" && row.type !== FILTERS.type) return false;
+    const query = FILTERS.search.trim().toLowerCase();
+    if (!query) return true;
+    return [row.order_name, row.customer, row.product_title, row.sku, row.evidence?.text, row.evidence?.field]
+      .some(value => String(value || "").toLowerCase().includes(query));
   });
+}
 
-  const normalizedSponsors = filterByDate(sponsors).map(x => {
-    let units = getNum(x.qty || x.quantity || 0);
-    if (!units && x.line_items) {
-      units = x.line_items.reduce((sum, item) => sum + getNum(item.quantity), 0);
-    }
-    x.units_calc = units;
-    
-    // Calculate retail from line items to ignore 100% order discounts
-    let retail = 0;
-    if (x.line_items && x.line_items.length > 0) {
-      retail = x.line_items.reduce((sum, item) => sum + (getNum(item.price) * getNum(item.quantity)), 0);
-    } else {
-      retail = getNum(x.retail || x.value || x.total_price);
-    }
-    x.retail_calc = retail;
-    
-    // Attempt to extract cost, or use a 20% estimate if completely missing since Shopify doesn't include it directly
-    let c = 0;
-    if (x.line_items && x.line_items.length > 0) {
-      // Use exact COGS from the GraphQL injection if available
-      let exactCostSum = 0;
-      let hasExactCost = false;
-      x.line_items.forEach(item => {
-        if (item.exact_cost !== undefined) {
-          exactCostSum += getNum(item.exact_cost) * getNum(item.quantity);
-          hasExactCost = true;
-        }
-      });
-      if (hasExactCost) {
-        c = exactCostSum;
-      }
-    }
-    
-    // Fallbacks if exact_cost wasn't available
-    if (c === 0) {
-      c = getNum(x.cost || x.Cost || x.cogs || x["Total Cost"] || 0);
-    }
-    
-    x.cost_calc = c;
-    
-    x.type_calc = detectType(x);
-    return x;
-  }).filter(x => {
-    // Hide standard customer sales (Pending type AND total_price > 0)
-    // Keep it if it has a 100% discount (total_price == 0) or if it has a Marketing tag.
-    if (x.type_calc === "Pending" && getNum(x.total_price) > 0) {
-      return false; 
-    }
-    return true;
-  });
+function setDataStatus(text, healthy = true) {
+  const status = $("#dataStatus");
+  if (status) status.textContent = text;
+  const dot = $(".status span");
+  if (dot) dot.style.background = healthy ? "" : "#b56d00";
+}
 
-  return {
-    sponsorships: normalizedSponsors,
-    accounting: Array.isArray(q) ? filterByDate(q) : [],
-    raw: d
-  };
+function renderEmpty(message) {
+  $("#kpis").innerHTML = `<div class="panel" style="grid-column:1/-1"><h2>No verified dataset available</h2><p class="sub">${escapeHtml(message)}</p></div>`;
+  $("#bars").textContent = "No verified data";
+  $("#types").textContent = "No verified data";
+  $("#coverage").textContent = "No verified data";
+  $("#reviewPreview").textContent = "No verified data";
+  $("#registerBody").innerHTML = "";
+  $("#acctBody").innerHTML = "";
+  $("#exceptionCards").innerHTML = "";
+}
+
+function renderKpis(rows) {
+  const orderCount = new Set(rows.map(orderKey).filter(Boolean)).size;
+  const units = rows.reduce((total, row) => total + number(row.quantity), 0);
+  const retail = rows.reduce((total, row) => total + number(row.retail_value), 0);
+  const netSales = rows.reduce((total, row) => total + number(row.net_sales), 0);
+  const costRows = rows.filter(row => hasNumber(row.current_unit_cost));
+  const cogs = costRows.reduce((total, row) => total + number(row.current_unit_cost) * number(row.quantity), 0);
+  const coverage = rows.length ? `${((costRows.length / rows.length) * 100).toFixed(1)}%` : "—";
+
+  $("#kpis").innerHTML = [
+    ["Qualified orders", orderCount],
+    ["Qualified units", units],
+    ["Gross merchandise value", money(retail)],
+    ["Net sales", money(netSales)],
+    ["Current COGS", money(cogs)],
+    ["COGS coverage", coverage],
+  ].map(([label, value]) => `<div class="kpi"><div class="label">${label}</div><div class="value">${value}</div></div>`).join("");
+}
+
+function renderCharts(rows) {
+  const months = new Map();
+  const types = new Map();
+  for (const row of rows) {
+    const month = sourceDate(row.created_at).slice(0, 7) || "Unknown";
+    months.set(month, (months.get(month) || 0) + number(row.retail_value));
+    types.set(row.type || "Unspecified", (types.get(row.type || "Unspecified") || 0) + 1);
+  }
+  const maximum = Math.max(...months.values(), 1);
+  $("#bars").innerHTML = [...months.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([month, value]) => `
+    <div class="chart-row"><div>${escapeHtml(month)}</div><div class="bar-track"><div class="bar-fill" style="width:${(value / maximum) * 100}%"></div></div><div>${money(value)}</div></div>
+  `).join("") || "No qualified orders for this filter.";
+  $("#types").innerHTML = [...types.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([type, count]) => `
+    <div class="type-row"><span>${escapeHtml(type)}</span><strong>${count} lines</strong></div>
+  `).join("") || "No qualified orders for this filter.";
+}
+
+function renderCoverage(rows) {
+  const source = DATA.meta || {};
+  const exactCosts = rows.filter(row => hasNumber(row.current_unit_cost)).length;
+  const values = [
+    ["Generated", source.generated_at ? new Date(source.generated_at).toLocaleString() : "Unknown"],
+    ["Shopify orders scanned", source.orders_scanned ?? "—"],
+    ["Qualified line items", rows.length],
+    ["Lines with current cost", `${exactCosts} / ${rows.length}`],
+    ["Excluded canceled/test", source.excluded_orders ?? "—"],
+    ["Review queue", DATA.reviewQueue.length],
+  ];
+  $("#coverage").innerHTML = values.map(([label, value]) => `<article class="cover-card"><div class="label">${escapeHtml(label)}</div><strong>${escapeHtml(value)}</strong></article>`).join("");
+}
+
+function renderRegister(rows) {
+  $("#registerBody").innerHTML = rows.map(row => {
+    const currentCost = hasNumber(row.current_unit_cost) ? money(number(row.current_unit_cost) * number(row.quantity)) : "—";
+    const costStatus = hasNumber(row.current_unit_cost) ? "Current Shopify cost" : "Cost unavailable";
+    const evidence = row.evidence ? `${row.evidence.field}: ${row.evidence.text}` : "—";
+    return `<tr>
+      <td>${escapeHtml(sourceDate(row.created_at))}</td>
+      <td>${escapeHtml(row.order_name || row.order_id)}</td>
+      <td>${escapeHtml(row.customer || "—")}</td>
+      <td>${escapeHtml(row.product_title || "—")}<br><small>${escapeHtml(row.sku || "No SKU")}</small></td>
+      <td>${number(row.quantity)}</td>
+      <td>${money(row.retail_value)}</td>
+      <td>${currentCost}</td>
+      <td>${money(row.net_sales)}</td>
+      <td>${badge(costStatus)}</td>
+      <td>${escapeHtml(evidence)}</td>
+      <td>${badge(row.type)}</td>
+    </tr>`;
+  }).join("") || `<tr><td colspan="11">No qualified sponsorship lines match the selected filters.</td></tr>`;
+}
+
+function accountingValue(row) {
+  return row.Amount ?? row.amount ?? row.value ?? row.total ?? row.Total ?? row["Paid Amount"];
+}
+
+function renderAccounting() {
+  const accounting = Array.isArray(DATA.accounting) ? DATA.accounting : [];
+  $("#acctKpis").innerHTML = [
+    ["Accounting rows", accounting.length],
+    ["Imported amount", money(accounting.reduce((total, row) => total + number(accountingValue(row)), 0))],
+  ].map(([label, value]) => `<div class="kpi"><div class="label">${label}</div><div class="value">${value}</div></div>`).join("");
+  $("#acctBody").innerHTML = accounting.slice(0, 500).map(row => `<tr>
+    <td>${escapeHtml(row.Date || row.date || row["Txn Date"] || "")}</td>
+    <td>${escapeHtml(row.Vendor || row.vendor || row.Name || "")}</td>
+    <td>${escapeHtml(row.Transaction || row.transaction || row.Type || "")}</td>
+    <td>${escapeHtml(row.Account || row.account || "")}</td>
+    <td>${escapeHtml(row.Memo || row.memo || row.ref || row["Memo/Description"] || "—")}</td>
+    <td>${money(accountingValue(row))}</td>
+    <td>${escapeHtml(row.Linked || row.linked || row.shopify_id || row.Num || "—")}</td>
+    <td>${badge(row.Status || row.status || "Not linked")}</td>
+  </tr>`).join("") || `<tr><td colspan="8">No QuickBooks rows were imported. This does not affect Shopify sponsorship totals.</td></tr>`;
+}
+
+function reviewText(item) {
+  const order = item.order_name || item.order_id || "Unknown order";
+  const evidence = item.review_reason || "Manual classification required";
+  return `<article class="exception"><h3>${escapeHtml(order)}</h3><p>${escapeHtml(evidence)}</p><small>${escapeHtml(item.store || "Shopify")}</small></article>`;
+}
+
+function renderReview() {
+  const items = DATA.reviewQueue || [];
+  $("#reviewCount").textContent = `${items.length} items`;
+  $("#reviewPreview").innerHTML = items.slice(0, 3).map(reviewText).join("") || "No ambiguous zero-value or candidate orders were found.";
+  $("#exceptionCards").innerHTML = items.map(reviewText).join("") || "No records require classification review.";
+}
+
+function render() {
+  if (LOAD_ERROR) {
+    renderEmpty(LOAD_ERROR);
+    return;
+  }
+  const rows = rowsForFilters();
+  renderKpis(rows);
+  renderCharts(rows);
+  renderCoverage(rows);
+  renderRegister(rows);
+  renderAccounting();
+  renderReview();
+}
+
+function refreshFilters() {
+  const months = [...new Set(DATA.sponsorships.map(row => sourceDate(row.created_at).slice(0, 7)).filter(Boolean))].sort();
+  const types = [...new Set(DATA.sponsorships.map(row => row.type).filter(Boolean))].sort();
+  $("#month").innerHTML = `<option value="all">All months</option>${months.map(month => `<option value="${escapeHtml(month)}">${escapeHtml(month)}</option>`).join("")}`;
+  $("#type").innerHTML = `<option value="all">All types</option>${types.map(type => `<option value="${escapeHtml(type)}">${escapeHtml(type)}</option>`).join("")}`;
+}
+
+function exportCsv() {
+  const headers = ["Store", "Order", "Created at", "Customer", "Product", "SKU", "Quantity", "Gross merchandise value", "Net sales", "Current unit cost", "Type", "Evidence field", "Evidence text"];
+  const quote = value => `"${String(value ?? "").replaceAll('"', '""')}"`;
+  const lines = rowsForFilters().map(row => [row.store, row.order_name || row.order_id, row.created_at, row.customer, row.product_title, row.sku, row.quantity, row.retail_value, row.net_sales, row.current_unit_cost, row.type, row.evidence?.field, row.evidence?.text].map(quote).join(","));
+  const blob = new Blob([[headers.map(quote).join(","), ...lines].join("\r\n")], { type: "text/csv;charset=utf-8" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "sponsorship-tracking-export.csv";
+  link.click();
+  URL.revokeObjectURL(link.href);
 }
 
 async function loadDashboard() {
   try {
-    const r = await fetch("./data/dashboard.json?" + Date.now());
-    if (!r.ok) throw Error(r.status);
-    DATA = normalize(await r.json());
-  } catch (e) {
-    try {
-      const r = await fetch("./data/mock-data.json?" + Date.now());
-      DATA = normalize(await r.json());
-    } catch (x) { console.error("Error cargando mock data", x) }
+    const response = await fetch("/data/dashboard.json", { cache: "no-store" });
+    if (!response.ok) throw new Error(response.status === 404 ? "The live Shopify dataset has not been generated yet." : "The verified dataset could not be loaded.");
+    const payload = await response.json();
+    if (payload?.meta?.status !== "verified" || !Array.isArray(payload.sponsorships)) {
+      throw new Error("The published file is not a verified Sponsorship Tracking dataset.");
+    }
+    DATA = {
+      sponsorships: payload.sponsorships,
+      reviewQueue: Array.isArray(payload.review_queue) ? payload.review_queue : [],
+      accounting: Array.isArray(payload.accounting) ? payload.accounting : [],
+      meta: payload.meta,
+    };
+    refreshFilters();
+    setDataStatus(`Verified Shopify data - ${new Date(DATA.meta.generated_at).toLocaleDateString()}`);
+  } catch (error) {
+    LOAD_ERROR = error.message || "The verified dataset could not be loaded.";
+    setDataStatus("No verified data", false);
   }
   render();
 }
 
-function render() {
-  let s = DATA.sponsorships;
-  let a = DATA.accounting;
-  
-  // Apply filters
-  if (FILTERS.month !== "all") {
-    s = s.filter(x => (x.date || x.created_at || "").startsWith(FILTERS.month));
-  }
-  if (FILTERS.type !== "all") s = s.filter(x => x.type_calc === FILTERS.type);
-  if (FILTERS.match !== "all") s = s.filter(x => (x.status || x.match_status || "Pending") === FILTERS.match);
-  
-  if (FILTERS.quarter !== "all") {
-    s = s.filter(x => {
-      const m = new Date(x.date || x.created_at).getMonth() + 1;
-      const q = Math.ceil(m / 3);
-      return `Q${q}` === FILTERS.quarter;
-    });
-  }
-  
-  // 1. Arreglamos los cálculos numéricos en los KPIs
-  if ($("#kpis")) {
-    const totalRetail = s.reduce((t, x) => t + (x.retail_calc || 0), 0);
-    const totalUnits = s.reduce((t, x) => t + (x.units_calc || 0), 0);
-    const totalCost = s.reduce((t, x) => t + (x.cost_calc || 0), 0);
-    const totalGM = totalRetail - totalCost;
-    const gmPercent = totalRetail > 0 ? ((totalGM / totalRetail) * 100).toFixed(1) + "%" : "0%";
-
-    $("#kpis").innerHTML = `
-      <div class="kpi"><div class="label">Total Orders</div><div class="value">${s.length}</div></div>
-      <div class="kpi"><div class="label">Units</div><div class="value">${totalUnits}</div></div>
-      <div class="kpi"><div class="label">Retail Value</div><div class="value">${money(totalRetail)}</div></div>
-      <div class="kpi"><div class="label">COGS</div><div class="value">${money(totalCost)}</div></div>
-      <div class="kpi"><div class="label">Gross Profit</div><div class="value">${money(totalGM)}</div></div>
-      <div class="kpi"><div class="label">GM %</div><div class="value">${gmPercent}</div></div>`;
-  }
-
-  const months = {}; 
-  const types = {};
-  
-  s.forEach(x => {
-    let m = safe(x.date || x.created_at, "Unknown").slice(0, 7);
-    months[m] = (months[m] || 0) + 1;
-    let t = safe(x.type_calc, "Other");
-    types[t] = (types[t] || 0) + 1;
-  });
-
-  if ($("#bars")) {
-    const maxVal = Math.max(...Object.values(months), 1);
-    $("#bars").innerHTML = Object.entries(months).map(([k, v]) => {
-      const percentage = (v / maxVal) * 100;
-      return `
-        <div class="chart-row">
-          <div>${k}</div>
-          <div class="bar-track"><div class="bar-fill" style="width: ${percentage}%"></div></div>
-          <div>${v}</div>
-        </div>`;
-    }).join("") || "No data";
-  }
-
-  if ($("#types")) {
-    $("#types").innerHTML = Object.entries(types).map(([k, v]) => `
-      <div class="type-row">
-        <span>${k}</span>
-        <strong>${v}</strong>
-      </div>`).join("") || "No data";
-  }
-
-  // 2. Arreglamos la tabla de Sponsorship Register (nombres y valores)
-  if ($("#registerBody")) {
-    $("#registerBody").innerHTML = s.map(x => {
-      const retail = x.retail_calc;
-      const cost = x.cost_calc;
-      const gm = retail - cost;
-      
-      return `
-      <tr>
-        <td>${safe(x.date || x.created_at, "")}</td>
-        <td>${safe(x.order || x.name, "")}</td>
-        <td>${getCustomerName(x.recipient || x.customer)}</td>
-        <td>${safe(x.product || x.sku || (x.line_items && x.line_items[0] ? x.line_items[0].name : ""), "N/A")}</td>
-        <td>${x.units_calc}</td>
-        <td>${money(retail)}</td>
-        <td>${money(cost)}</td>
-        <td>${money(gm)}</td>
-        <td>${badge(x.type_calc)}</td>
-      </tr>`;
-    }).join("");
-  }
-
-  if ($("#acctBody")) {
-    $("#acctBody").innerHTML = a.slice(0, 500).map(x => `
-      <tr>
-        <td>${safe(x.Date || x.date || x.txn_date || x["Txn Date"] || x["Transaction Date"], "")}</td>
-        <td>${safe(x.Vendor || x.vendor || x.name || x["Name"], "")}</td>
-        <td>${safe(x.Transaction || x.transaction || x.txn || x["Transaction Type"] || x["Type"], "")}</td>
-        <td>${safe(x.Account || x.account, "")}</td>
-        <td>${safe(x.Memo || x.memo || x.ref || x["Memo/Description"] || x["Ref"], "-")}</td>
-        <td>${money(getNum(x.Amount || x.amount || x.value || x.total || x["Total"] || x["Paid Amount"]))}</td>
-        <td>${safe(x.Linked || x.linked || x.shopify_id || x["Num"], "-")}</td>
-        <td>${badge(x.Status || x.status || x.match_status)}</td>
-      </tr>`).join("");
-  }
-
-  // 3. Añadimos la lógica para renderizar la Review Queue
-  if ($("#exceptionCards")) {
-    const reviewItems = s.filter(x => (x.status || x.match_status || "").toLowerCase().includes("review") || (x.type_calc || "").toLowerCase().includes("pending"));
-    
-    if(reviewItems.length === 0) {
-        $("#exceptionCards").innerHTML = `<p class="muted">No items currently require manual review.</p>`;
-    } else {
-        $("#exceptionCards").innerHTML = reviewItems.map(x => `
-          <div class="exception">
-            <h3>Order ${safe(x.order || x.name)}</h3>
-            <p>Needs review for: <b>${safe(x.type_calc, "Classification")}</b></p>
-            <small>Detected: ${safe(x.detected_by || x.rule, "Auto")}</small>
-          </div>
-        `).join("");
-    }
-    
-    if ($("#reviewCount")) {
-        $("#reviewCount").innerText = reviewItems.length + " items";
-    }
-  }
-}
-
 document.addEventListener("DOMContentLoaded", () => {
-  const themeToggleBtn = document.getElementById("themeToggle");
-  if (themeToggleBtn) {
-    themeToggleBtn.addEventListener("click", () => {
-      document.body.dataset.theme = document.body.dataset.theme === "dark" ? "light" : "dark";
-    });
-  }
-
-  document.querySelectorAll(".nav").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".nav").forEach(x => x.classList.remove("active"));
-      document.querySelectorAll(".view").forEach(x => x.classList.remove("active-view"));
-      
-      btn.classList.add("active");
-      const targetView = document.getElementById(btn.dataset.view);
-      if (targetView) {
-        targetView.classList.add("active-view");
-      }
-    });
+  $("#themeToggle")?.addEventListener("click", () => {
+    document.body.dataset.theme = document.body.dataset.theme === "dark" ? "light" : "dark";
   });
-
-  const updateFilters = () => {
-    if ($("#month")) FILTERS.month = $("#month").value;
-    if ($("#quarter")) FILTERS.quarter = $("#quarter").value;
-    if ($("#type")) FILTERS.type = $("#type").value;
-    if ($("#match")) FILTERS.match = $("#match").value;
+  document.querySelectorAll(".nav").forEach(button => button.addEventListener("click", () => {
+    document.querySelectorAll(".nav").forEach(element => element.classList.remove("active"));
+    document.querySelectorAll(".view").forEach(element => element.classList.remove("active-view"));
+    button.classList.add("active");
+    document.getElementById(button.dataset.view)?.classList.add("active-view");
+  }));
+  $("#month")?.addEventListener("change", event => { FILTERS.month = event.target.value; render(); });
+  $("#quarter")?.addEventListener("change", event => { FILTERS.quarter = event.target.value; render(); });
+  $("#type")?.addEventListener("change", event => { FILTERS.type = event.target.value; render(); });
+  $("#search")?.addEventListener("input", event => { FILTERS.search = event.target.value; render(); });
+  $("#reset")?.addEventListener("click", () => {
+    FILTERS = { month: "all", quarter: "all", type: "all", search: "" };
+    if ($("#month")) $("#month").value = "all";
+    if ($("#quarter")) $("#quarter").value = "all";
+    if ($("#type")) $("#type").value = "all";
+    if ($("#search")) $("#search").value = "";
     render();
-  };
-
-  ["#month", "#quarter", "#type", "#match"].forEach(sel => {
-    if ($(sel)) $(sel).addEventListener("change", updateFilters);
   });
-  
-  if ($("#reset")) {
-    $("#reset").addEventListener("click", () => {
-      FILTERS = { month: "all", quarter: "all", type: "Sponsorship", match: "all" };
-      if ($("#month")) $("#month").value = "all";
-      if ($("#quarter")) $("#quarter").value = "all";
-      if ($("#type")) $("#type").value = "Sponsorship";
-      if ($("#match")) $("#match").value = "all";
-      render();
-    });
-  }
-
-  loadDashboard().then(() => {
-    // Populate month options dynamically
-    if ($("#month")) {
-      const monthsSet = new Set(DATA.sponsorships.map(x => (x.date || x.created_at || "").slice(0, 7)).filter(Boolean));
-      const sortedMonths = Array.from(monthsSet).sort();
-      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      let options = `<option value="all">All months</option>`;
-      sortedMonths.forEach(m => {
-        const [yyyy, mm] = m.split("-");
-        options += `<option value="${m}">${monthNames[parseInt(mm)-1]} ${yyyy}</option>`;
-      });
-      $("#month").innerHTML = options;
-      $("#month").value = FILTERS.month;
-    }
-    
-    // Populate types dynamically
-    if ($("#type")) {
-      const typeSet = new Set(DATA.sponsorships.map(x => x.type_calc).filter(Boolean));
-      let options = `<option value="all">All types</option>`;
-      Array.from(typeSet).sort().forEach(t => {
-        options += `<option value="${t}">${t}</option>`;
-      });
-      $("#type").innerHTML = options;
-      $("#type").value = FILTERS.type;
-    }
+  $("#exportBtn")?.addEventListener("click", exportCsv);
+  $("#logoutBtn")?.addEventListener("click", async () => {
+    await fetch("/api/logout", { method: "POST" }).catch(() => {});
+    window.location.assign("/login.html");
   });
+  loadDashboard();
 });

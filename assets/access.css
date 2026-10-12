@@ -1,0 +1,12 @@
+:root { color-scheme: light; font-family: Arial, sans-serif; color: #10233b; background: #eef5fa; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+.access-shell { width: min(440px, 100%); }
+.access-card { background: #fff; border: 1px solid #cdddeb; border-radius: 8px; padding: 40px; box-shadow: 0 16px 42px rgba(18, 45, 71, .12); text-align: center; }
+.access-mark { width: 68px; height: 68px; object-fit: contain; margin-bottom: 12px; }
+.eyebrow { margin: 0 0 8px; color: #1b896d; font-weight: 800; font-size: 11px; letter-spacing: .12em; }
+h1 { margin: 0; font-size: 28px; }
+.copy { color: #55708c; line-height: 1.5; }
+.message { min-height: 42px; margin: 24px 0 12px; color: #9b6107; font-size: 14px; line-height: 1.45; }
+.google-sign-in { display: flex; justify-content: center; min-height: 44px; }
+.footnote { margin: 24px 0 0; border-top: 1px solid #e2ebf2; padding-top: 18px; color: #7890a7; font-size: 12px; }

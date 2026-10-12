@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "sponsorship",
+      "type": "Sponsorship",
+      "terms": ["sponsorship", "sponsored"],
+      "fields": ["tags", "note", "note_attributes", "discount_codes"]
+    }
+  ],
+  "reviewTerms": [
+    "gift",
+    "giveaway",
+    "influencer",
+    "ambassador",
+    "seed",
+    "sample",
+    "review",
+    "press",
+    "creator"
+  ]
+}

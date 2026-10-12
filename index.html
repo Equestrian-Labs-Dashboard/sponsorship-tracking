@@ -16,10 +16,10 @@
           </div>
           <div class="brand-wording">
             <div class="brand-title">CORRO</div>
-            <div class="brand-subtitle">Sponsorship Tracking Draft</div>
+            <div class="brand-subtitle">Sponsorship Tracking</div>
           </div>
         </div>
-        <p class="brand-copy">A clean draft to review sponsorship activity, trace item-level evidence, and match accounting signals from Shopify and QuickBooks.</p>
+        <p class="brand-copy">Verified Shopify evidence for sponsorship activity, with each record traceable to its order, line item and classification rule.</p>
       </div>
 
       <nav class="nav-group">
@@ -34,16 +34,16 @@
         <div class="sidebar-card-title">Connected sources</div>
         <div class="sidebar-source-list">
           <span>Shopify orders & line items</span>
-          <span>QuickBooks bills & expenses</span>
-          <span>Derived classification logic</span>
+          <span>Shopify current item costs</span>
+          <span>Optional QuickBooks reconciliation</span>
         </div>
       </div>
 
       <div class="side-note">
         <span class="dot"></span>
         <div>
-          <b>Live connector mode</b>
-          <small>Shopify + QuickBooks + Google Sheets pipeline ready</small>
+          <b>Verified-data mode</b>
+          <small>No example dataset is published</small>
         </div>
       </div>
     </aside>
@@ -53,11 +53,11 @@
         <div>
           <p class="eyebrow">CORRO · SPONSORSHIP TRACKING</p>
           <h1>Sponsorship Tracker <span>Live</span></h1>
-          <p class="sub">Modern, reviewable, and functional draft prepared for future Shopify + QuickBooks connections. Built to show traceability first — not inflated or invented metrics.</p>
+          <p class="sub">Shows only records generated from Shopify. Each classification retains the triggering field and text so the total can be checked in Shopify.</p>
           <div class="chip-row">
-            <span class="chip chip-accent">Shopify-ready</span>
-            <span class="chip chip-neutral">QuickBooks-ready</span>
-            <span class="chip chip-neutral">Weekly / Monthly / Quarterly</span>
+            <span class="chip chip-accent">Shopify sourced</span>
+            <span class="chip chip-neutral">Current COGS identified separately</span>
+            <span class="chip chip-neutral">Monthly / quarterly filters</span>
             <span class="chip chip-neutral">Traceable classifications</span>
           </div>
         </div>
@@ -68,7 +68,8 @@
             <span class="toggle-label">Dark mode</span>
           </button>
           <button id="exportBtn" class="ghost">Export CSV</button>
-          <div class="status"><span></span><strong>Draft</strong>&nbsp;dataset loaded</div>
+          <button id="logoutBtn" class="ghost">Log out</button>
+          <div class="status"><span></span><strong id="dataStatus">Loading verified data</strong></div>
         </div>
       </section>
 
@@ -90,7 +91,7 @@
                 <p class="eyebrow">TREND</p>
                 <h2>Monthly Sponsorship Activity</h2>
               </div>
-              <span>Retail value</span>
+              <span>Shopify gross merchandise value</span>
             </div>
             <div id="bars" class="bars-container"></div>
           </div>
@@ -152,7 +153,9 @@
                   <th>Units</th>
                   <th>Retail Value</th>
                   <th>COGS</th>
-                  <th>Gross Profit</th>
+                  <th>Net sales</th>
+                  <th>Cost status</th>
+                  <th>Classification evidence</th>
                   <th>Type</th>
                 </tr>
               </thead>
@@ -209,7 +212,7 @@
         <section class="panel full methodology">
           <div>
             <p class="eyebrow">DATA CONTRACT</p>
-            <h2>What this Draft uses</h2>
+            <h2>Data and reconciliation rules</h2>
           </div>
 
           <div class="method-grid">
@@ -226,27 +229,27 @@
             <article>
               <span class="source manual">DERIVED / REVIEW</span>
               <h3>Tracker-only fields</h3>
-              <p>Sponsorship type, detection reason, confidence, accounting match status, and review note. These are derived or reviewed — never silently invented.</p>
+              <p>Classification type, the exact triggering field, cost availability and review reason. Records without a configured rule are sent to Review Queue instead of being silently classified.</p>
             </article>
           </div>
 
           <div class="rules-grid">
             <div class="rules">
-              <h3>Detection logic for Draft</h3>
-              <p>Keywords are checked against Shopify tags, notes, custom attributes, discount labels/codes, and relevant product/customer metadata. Every record preserves the field that triggered classification.</p>
+              <h3>Detection logic</h3>
+              <p>Configured terms are checked against Shopify order tags, notes, custom attributes and discount codes. Every published record preserves the matching field and text. The rules file contains only confirmed terms; possible gift, seeding or influencer orders remain in Review Queue until Ceci confirms a rule.</p>
               <div class="chips">
-                <span>sponsorship</span><span>sponsored</span><span>seeded / seeding</span><span>gift / giveaway</span><span>influencer</span><span>ambassador</span><span>sample / review</span><span>press / PR</span><span>social / content creator</span>
+                <span>sponsorship</span><span>sponsored</span><span>tags</span><span>notes</span><span>custom attributes</span><span>discount codes</span>
               </div>
             </div>
             <div class="rules muted-panel">
-              <h3>Intentionally not assumed yet</h3>
-              <p>This draft does not assume ROI, ROAS, CAC, influencer revenue attribution, social engagement, or campaign budget metrics, because those were not confirmed for this project.</p>
+              <h3>Not treated as historical accounting cost</h3>
+              <p>Shopify inventory item cost is the current catalog cost at synchronization time. It is shown for operational visibility, not as a substitute for invoice-level or period historical COGS. The report does not invent ROI, ROAS, CAC or campaign revenue attribution.</p>
             </div>
           </div>
         </section>
       </div>
 
-      <footer>Draft architecture: Shopify → sponsorship classification ETL → normalized dataset ← QuickBooks reconciliation → GitHub Pages dashboard.</footer>
+      <footer>Shopify → evidence-preserving sponsorship extraction → protected Cloudflare Pages report. Optional QuickBooks rows are shown separately until an exact join key exists.</footer>
     </main>
   </div>
 

@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "sync-data": "node scripts/sync-data.js",
-    "validate": "node --check scripts/sync-data.js"
+    "build": "node scripts/build-site.mjs",
+    "validate": "node --check scripts/sync-data.js && node --check scripts/build-site.mjs && node --check assets/app.js && node --check assets/login.js && node --check functions/_middleware.js && node --check functions/api/login.js && node --check functions/api/me.js && node --check functions/_lib/registry.js"
   },
   "dependencies": {
     "googleapis": "^144.0.0"

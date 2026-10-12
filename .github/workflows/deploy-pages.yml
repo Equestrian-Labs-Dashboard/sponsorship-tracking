@@ -1,92 +1,49 @@
-name: Build data and deploy dashboard
+name: Refresh sponsorship data and deploy
 
 on:
   push:
-    branches:
-      - main
-
+    branches: [main]
   workflow_dispatch:
-
+  schedule:
+    - cron: "15 13 * * *"
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
+concurrency:
+  group: sponsorship-tracking-production
+  cancel-in-progress: false
 
 jobs:
-
   deploy:
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-
     runs-on: ubuntu-latest
-
-
     steps:
-
-
-      - name: Checkout
+      - name: Check out source
         uses: actions/checkout@v4
-
-
-
-      - name: Setup Node
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-
-
-
+          node-version: 22
       - name: Install dependencies
-        run: npm install
-
-
-
-      - name: Generate dashboard data
+        run: npm install --ignore-scripts
+      - name: Validate production source
+        run: npm run validate
+      - name: Generate verified Shopify dataset
         env:
-
-          GOOGLE_SHEET_ID:
-            ${{ secrets.GOOGLE_SHEET_ID }}
-
-          GOOGLE_SERVICE_ACCOUNT_JSON:
-            ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-
-          CORRO_SHOPIFY_STORE:
-            ${{ secrets.CORRO_SHOPIFY_STORE }}
-
-          CORRO_SHOPIFY_ACCESS_TOKEN:
-            ${{ secrets.CORRO_SHOPIFY_ACCESS_TOKEN }}
-
-          CAVALI_SHOPIFY_STORE:
-            ${{ secrets.CAVALI_SHOPIFY_STORE }}
-
-          CAVALI_SHOPIFY_ACCESS_TOKEN:
-            ${{ secrets.CAVALI_SHOPIFY_ACCESS_TOKEN }}
-
-
+          SHOPIFY_API_VERSION: ${{ vars.SHOPIFY_API_VERSION }}
+          SPONSORSHIP_START_DATE: ${{ vars.SPONSORSHIP_START_DATE }}
+          CORRO_SHOPIFY_STORE: ${{ secrets.CORRO_SHOPIFY_STORE }}
+          CORRO_SHOPIFY_ACCESS_TOKEN: ${{ secrets.CORRO_SHOPIFY_ACCESS_TOKEN }}
+          CAVALI_SHOPIFY_STORE: ${{ secrets.CAVALI_SHOPIFY_STORE }}
+          CAVALI_SHOPIFY_ACCESS_TOKEN: ${{ secrets.CAVALI_SHOPIFY_ACCESS_TOKEN }}
+          GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         run: npm run sync-data
-
-
-
-
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
-
-
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Build protected static site
+        run: npm run build
+      - name: Deploy Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
         with:
-          path: .
-
-
-
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy public --project-name=sponsorship-tracking-report --branch=main

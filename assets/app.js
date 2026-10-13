@@ -11,6 +11,10 @@ const hasNumber = value => value !== null && value !== undefined && value !== ""
 const money = value => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(number(value));
 const escapeHtml = value => String(value ?? "").replace(/[&<>'"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[character]);
 const sourceDate = value => String(value || "").slice(0, 10);
+const monthLabel = month => {
+  const date = new Date(`${month}-01T00:00:00Z`);
+  return Number.isNaN(date.valueOf()) ? month : new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric", timeZone: "UTC" }).format(date);
+};
 
 function className(value) {
   return String(value || "not-linked").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -46,6 +50,21 @@ function setDataStatus(text, healthy = true) {
   if (status) status.textContent = text;
   const dot = $(".status span");
   if (dot) dot.style.background = healthy ? "" : "#b56d00";
+}
+
+function emptyFilterMessage() {
+  if (FILTERS.month !== "all") {
+    return `No qualified sponsorship activity was identified in the verified Shopify data for ${monthLabel(FILTERS.month)}. No order matched the confirmed sponsorship rules for that month.`;
+  }
+  return "No qualified sponsorship activity matches the selected filters.";
+}
+
+function renderFilterNotice(rows) {
+  const notice = $("#filterNotice");
+  if (!notice) return;
+  const hasNoMatches = DATA.sponsorships.length > 0 && rows.length === 0;
+  notice.hidden = !hasNoMatches;
+  notice.textContent = hasNoMatches ? emptyFilterMessage() : "";
 }
 
 function renderEmpty(message) {
@@ -89,10 +108,10 @@ function renderCharts(rows) {
   const maximum = Math.max(...months.values(), 1);
   $("#bars").innerHTML = [...months.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([month, value]) => `
     <div class="chart-row"><div>${escapeHtml(month)}</div><div class="bar-track"><div class="bar-fill" style="width:${(value / maximum) * 100}%"></div></div><div>${money(value)}</div></div>
-  `).join("") || "No qualified orders for this filter.";
+  `).join("") || emptyFilterMessage();
   $("#types").innerHTML = [...types.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([type, count]) => `
     <div class="type-row"><span>${escapeHtml(type)}</span><strong>${count} lines</strong></div>
-  `).join("") || "No qualified orders for this filter.";
+  `).join("") || emptyFilterMessage();
 }
 
 function renderCoverage(rows) {
@@ -127,7 +146,7 @@ function renderRegister(rows) {
       <td>${escapeHtml(evidence)}</td>
       <td>${badge(row.type)}</td>
     </tr>`;
-  }).join("") || `<tr><td colspan="11">No qualified sponsorship lines match the selected filters.</td></tr>`;
+  }).join("") || `<tr><td colspan="11">${escapeHtml(emptyFilterMessage())}</td></tr>`;
 }
 
 function accountingValue(row) {
@@ -171,6 +190,7 @@ function render() {
     return;
   }
   const rows = rowsForFilters();
+  renderFilterNotice(rows);
   renderKpis(rows);
   renderCharts(rows);
   renderCoverage(rows);
@@ -180,9 +200,21 @@ function render() {
 }
 
 function refreshFilters() {
-  const months = [...new Set(DATA.sponsorships.map(row => sourceDate(row.created_at).slice(0, 7)).filter(Boolean))].sort();
+  const sourceMonths = DATA.sponsorships.map(row => sourceDate(row.created_at).slice(0, 7)).filter(Boolean).sort();
+  const startValue = DATA.meta?.start_date || sourceMonths[0];
+  const endValue = DATA.meta?.generated_at || sourceMonths.at(-1);
+  const start = new Date(`${String(startValue || "").slice(0, 7)}-01T00:00:00Z`);
+  const end = new Date(`${String(endValue || "").slice(0, 7)}-01T00:00:00Z`);
+  const months = [];
+  if (!Number.isNaN(start.valueOf()) && !Number.isNaN(end.valueOf()) && start <= end) {
+    for (const cursor = new Date(start); cursor <= end; cursor.setUTCMonth(cursor.getUTCMonth() + 1)) {
+      months.push(cursor.toISOString().slice(0, 7));
+    }
+  } else {
+    months.push(...new Set(sourceMonths));
+  }
   const types = [...new Set(DATA.sponsorships.map(row => row.type).filter(Boolean))].sort();
-  $("#month").innerHTML = `<option value="all">All months</option>${months.map(month => `<option value="${escapeHtml(month)}">${escapeHtml(month)}</option>`).join("")}`;
+  $("#month").innerHTML = `<option value="all">All months</option>${months.map(month => `<option value="${escapeHtml(month)}">${escapeHtml(monthLabel(month))}</option>`).join("")}`;
   $("#type").innerHTML = `<option value="all">All types</option>${types.map(type => `<option value="${escapeHtml(type)}">${escapeHtml(type)}</option>`).join("")}`;
 }
 

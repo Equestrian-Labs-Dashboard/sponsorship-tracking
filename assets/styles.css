@@ -154,6 +154,8 @@ h1 span { font-weight: 500; color: var(--muted); }
 .filters input, .filters select, .search { width: 100%; margin-top: 6px; padding: 11px 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); color: var(--ink); outline: none; }
 .filters input:focus, .filters select:focus, .search:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
 .secondary { align-self: end; height: 44px; background: var(--panel-alt); }
+.filter-notice { margin: -8px 0 18px; padding: 12px 15px; color: var(--info); background: var(--info-bg); border: 1px solid color-mix(in srgb, var(--info) 28%, var(--line)); border-left: 4px solid var(--info); border-radius: 8px; font-size: 13px; font-weight: 650; line-height: 1.45; }
+.filter-notice[hidden] { display: none; }
 
 .view { display: none; }
 .active-view { display: block; }

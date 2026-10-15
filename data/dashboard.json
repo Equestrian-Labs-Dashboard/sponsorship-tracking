@@ -1,7 +1,7 @@
 {
   "meta": {
     "status": "verified",
-    "generated_at": "2026-10-14T18:03:44.080Z",
+    "generated_at": "2026-10-15T17:49:52.875Z",
     "shopify_api_version": "2026-10",
     "start_date": "2026-01-01",
     "stores": [
@@ -9,8 +9,8 @@
       "Cavali Club"
     ],
     "rules_version": 1,
-    "orders_scanned": 4942,
-    "excluded_orders": 107,
+    "orders_scanned": 4946,
+    "excluded_orders": 108,
     "qualified_line_items": 47,
     "review_items": 540,
     "cogs_note": "Current Shopify inventory item unit cost captured at synchronization time; not historical invoice-level COGS."
@@ -168368,511 +168368,511 @@
       "source_tab": "QuickBooks General Ledger Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Vendor",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Vendor",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "A1 WORLDWIDE LOGISTICS, INC.",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "A1 WORLDWIDE LOGISTICS, INC.",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Andis",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Andis",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "ANGELA RAUWOLF MARKETING",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "ANGELA RAUWOLF MARKETING",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Animal Health International",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Animal Health International",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Animal Health International",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Animal Health International",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Animal Health International",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Animal Health International",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Animal Health International",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Animal Health International",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Animal Health International",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Animal Health International",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Animal Health International",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Animal Health International",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Animal Health International",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Animal Health International",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Animal Health International",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Animal Health International",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Animal Health International",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Animal Health International",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Bhoof AB",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Bhoof AB",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Bhoof AB",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Bhoof AB",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Bhoof AB",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Bhoof AB",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Bhoof AB",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Bhoof AB",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "CC Projects AB",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "CC Projects AB",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "CC Projects AB",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "CC Projects AB",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "CC Projects AB",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "CC Projects AB",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "CC Projects AB",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "CC Projects AB",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "CC Projects AB",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "CC Projects AB",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Commission Junction LLC",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Commission Junction LLC",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Commission Junction LLC",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Commission Junction LLC",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Departement of labor and training -employer tax section",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Departement of labor and training -employer tax section",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Direct Action Co. Inc.",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Direct Action Co. Inc.",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Direct Action Co. Inc.",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Direct Action Co. Inc.",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Enviro Equine LLC",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Enviro Equine LLC",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Equestrian Wellness",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Equestrian Wellness",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Equinavia",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Equinavia",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Equinavia",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Equinavia",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Equinavia",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Equinavia",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "ESRE DIGITAL AB",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "ESRE DIGITAL AB",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "FHORZE Sweden AB",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "FHORZE Sweden AB",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Global International Products (DBA Kentucky)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Global International Products (DBA Kentucky)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Horseware Products Ltd",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Horseware Products Ltd",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Julia Stento",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Julia Stento",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Kensington Protective Products, Inc",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Kensington Protective Products, Inc",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Kensington Protective Products, Inc",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Kensington Protective Products, Inc",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Kensington Protective Products, Inc",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Kensington Protective Products, Inc",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Kensington Protective Products, Inc",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Kensington Protective Products, Inc",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Kensington Protective Products, Inc",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Kensington Protective Products, Inc",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Kensington Protective Products, Inc",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Kensington Protective Products, Inc",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "LeMieux",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "LeMieux",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Link Logistics",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Link Logistics",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Madden Analytics",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Madden Analytics",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Mare Goods LLC",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Mare Goods LLC",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Meta Platforms Inc.",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Meta Platforms Inc.",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Mikaela Reiserer",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Mikaela Reiserer",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "NORDK TECHNOLOGIES AB",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "NORDK TECHNOLOGIES AB",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Nunn Finer Products",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Nunn Finer Products",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Puravida Healthy Horse Inc.",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Puravida Healthy Horse Inc.",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "RebatesMe LLC",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "RebatesMe LLC",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Revival Animal Health LLC",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Revival Animal Health LLC",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Revival Animal Health LLC",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Revival Animal Health LLC",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Revival Animal Health LLC",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Revival Animal Health LLC",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Revival Animal Health LLC",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Revival Animal Health LLC",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Revival Animal Health LLC",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Revival Animal Health LLC",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "RJ Matthews Company",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "RJ Matthews Company",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "RJ Matthews Company",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "RJ Matthews Company",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "RJ Matthews Company",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "RJ Matthews Company",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "RJ Matthews Company",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "RJ Matthews Company",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "RJ Matthews Company",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "RJ Matthews Company",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "SCALENORTH INC",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "SCALENORTH INC",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "SCALENORTH INC",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "SCALENORTH INC",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "SCALENORTH INC",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "SCALENORTH INC",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "SCALENORTH INC",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "SCALENORTH INC",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "SCALENORTH INC",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "SCALENORTH INC",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "The Sea Fund LLC (Vendor)",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "The Sea Fund LLC (Vendor)",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Thelin Communications AB",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Thelin Communications AB",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "UPS",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "UPS",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Weatherbeeta",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Weatherbeeta",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Weatherbeeta",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Weatherbeeta",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Yotpo Inc.",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Yotpo Inc.",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {
-      "              QuickBooks Import\n              Last updated 29 days ago": "Yotpo Inc.",
+      "              QuickBooks Import\n              Last updated 4 weeks ago": "Yotpo Inc.",
       "source_tab": "QuickBooks Transaction List By Vendor Import"
     },
     {

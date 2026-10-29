@@ -1,7 +1,7 @@
 {
   "meta": {
     "status": "verified",
-    "generated_at": "2026-10-28T18:55:29.538Z",
+    "generated_at": "2026-10-29T19:00:44.793Z",
     "shopify_api_version": "2026-10",
     "start_date": "2026-01-01",
     "stores": [
@@ -9,10 +9,10 @@
       "Cavali Club"
     ],
     "rules_version": 1,
-    "orders_scanned": 4998,
+    "orders_scanned": 5003,
     "excluded_orders": 110,
     "qualified_line_items": 47,
-    "review_items": 552,
+    "review_items": 553,
     "cogs_note": "Current Shopify inventory item unit cost captured at synchronization time; not historical invoice-level COGS."
   },
   "sponsorships": [
@@ -1248,6 +1248,14 @@
       "created_at": "2026-10-17T12:20:20-04:00",
       "customer": "Joan m Cooney states",
       "review_reason": "Candidate signal in tags: gift; no confirmed sponsorship rule matched."
+    },
+    {
+      "store": "Corro",
+      "order_id": "6500646518842",
+      "order_name": "154939",
+      "created_at": "2026-10-16T13:34:28-04:00",
+      "customer": "Mónica Monroy",
+      "review_reason": "Zero-value order without a confirmed sponsorship rule."
     },
     {
       "store": "Corro",

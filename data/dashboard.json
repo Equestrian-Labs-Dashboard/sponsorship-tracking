@@ -1,7 +1,7 @@
 {
   "meta": {
     "status": "verified",
-    "generated_at": "2026-11-03T20:10:08.741Z",
+    "generated_at": "2026-11-04T20:29:40.756Z",
     "shopify_api_version": "2026-10",
     "start_date": "2026-01-01",
     "stores": [
@@ -9,8 +9,8 @@
       "Cavali Club"
     ],
     "rules_version": 1,
-    "orders_scanned": 5028,
-    "excluded_orders": 112,
+    "orders_scanned": 5030,
+    "excluded_orders": 113,
     "qualified_line_items": 47,
     "review_items": 554,
     "cogs_note": "Current Shopify inventory item unit cost captured at synchronization time; not historical invoice-level COGS."

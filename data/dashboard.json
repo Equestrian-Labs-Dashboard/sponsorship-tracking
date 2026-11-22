@@ -1,7 +1,7 @@
 {
   "meta": {
     "status": "verified",
-    "generated_at": "2026-11-21T20:06:52.929Z",
+    "generated_at": "2026-11-22T20:23:13.250Z",
     "shopify_api_version": "2026-10",
     "start_date": "2026-01-01",
     "stores": [
@@ -9,7 +9,7 @@
       "Cavali Club"
     ],
     "rules_version": 1,
-    "orders_scanned": 5225,
+    "orders_scanned": 5231,
     "excluded_orders": 119,
     "qualified_line_items": 47,
     "review_items": 561,
